@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/comment.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+    <title>留言管理</title>
+</head>
+<script>
+
+    $(document).ready(function() {
+
+        // 判斷該留言是否已被提交，改變文字顯示內容
+        $(".comment_container .comment").each(function() {
+            const isSubmmit = $(this).data("is-submmit");
+            const button = $(this).find(".submit_comment");
+            button.text(isSubmmit ? "已提交" : "提交");
+            button.addClass(isSubmmit ? "cancel_comment" : "submit_comment");
+        });
+    
+        // 提交商品評論
+        $(document).on("click", ".submit_comment", function() {
+            const commentId = $(this).closest(".comment").data("comment-id");
+            const button = $(this);
+            $.ajax({
+                url: `/product/comments/submit/${commentId}`,
+                type: "POST",
+                success: function(data) {
+                    alert(data);
+                    button.text("已提交");
+                    button.removeClass("submit_comment").addClass("cancel_comment");
+                    button.closest(".comment").data("is-submmit", 1);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    
+        // 取消提交商品評論
+        $(document).on("click", ".cancel_comment", function() {
+            const commentId = $(this).closest(".comment").data("comment-id");
+            const button = $(this);
+            $.ajax({
+                url: `/product/comments/cancel/${commentId}`,
+                type: "POST",
+                success: function(data) {
+                    alert(data);
+                    button.text("提交");
+                    button.removeClass("cancel_comment").addClass("submit_comment");
+                    button.closest(".comment").data("is-submmit", 0);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    
+    
+          // 刪除留言
+      $(document).on('click', '.delete_comment', function() {
+        const commentId = $(this).closest('.comment').data('comment-id');
+        const row = $(this).closest('.comment');
+        $.ajax({
+          url: `/comment/delete/${commentId}`,
+          type: 'POST',
+          success: function(data) {
+            alert(data);
+            row.remove();
+          },
+          error: function(xhr, status, error) {
+            console.error("Error:", error);
+          }
+        });
+      });
+
+    
+    });
+    </script>
+<body>
+    <%- include('nav_bar') %>
+
+
+
+
+    <div id="comment_btn_group">
+        <div class="group_row">
+            <a class="btn" href="/comment">所有留言</a>
+            <a class="btn" href="/comment_recent">最近留言</a>
+            <a class="btn" href="/comment_submitted">已提交</a>
+        </div>
+
+        <div class="group_row"> 
+            <button id="batch_submit_btn">批量提交</button>
+            <button id="batch_delete_btn">批量刪除</button>
+        </div >
+    </div>
+
+
+
+    <div class="comment_container submit">
+        <table>
+            <thead>
+                <tr>
+                    <th class="narrow">選取</th>
+                    <th >帳號</th>
+                    <th class="narrow_mid">時間</th>
+                    <th>產品</th>
+                    <th class="narrow">評分</th>
+                    <th class="narrow_big">留言內容</th>
+                    <th class="narrow">動作</th>
+                </tr>
+            </thead>
+            <tbody id="comment_table_body">
+                <% items.forEach(function(item) { %>
+                    <tr class="comment" data-comment-id="<%= item.comment_uid %>" data-is-submmit="<%= item.is_submmit %>">
+                        <td><input type="checkbox" /></td>
+                        <td><%= item.user_account %></td>
+                        <td><%= item.formatted_date %></td>
+                        <td><%= item.product_title %></td>
+                        <td><%= item.product_rating %></td>
+                        <td><%= item.product_comment %></td>
+                        <td><button class="submit_comment">提交</button>
+                            <button class="delete_comment">刪除</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    
+
+    <%- include('footer') %>
+</body>
+</html>

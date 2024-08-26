@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>後台</title>
+    <link rel="stylesheet" href="/backstage.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      $(".del").on("click", function () {
+        var uid = $(this).closest("tr").find("input[name='recipe']").val();
+
+        if (confirm("確定要刪除這筆資料嗎？")) {
+          $.ajax({
+            url: "/deleteRecipe",
+            method: "POST",
+            data: { uid: uid },
+            success: function (response) {
+              alert(response.message);
+              location.reload();
+            },
+          });
+        }
+      });
+
+      $(document).on("click", "#batch_del_btn", function () {
+        var uids = [];
+        $("input[name='recipe']:checked").each(function () {
+          uids.push($(this).val());
+        });
+
+        if (confirm("確定要刪除這些資料嗎？")) {
+          $.ajax({
+            url: "/deleteRecipes",
+            method: "POST",
+            data: { uids: uids },
+            success: function (response) {
+              alert(response.message);
+              location.reload(); // 重新載入頁面
+            },
+          });
+        }
+      });
+    });
+  </script>
+
+  <body>
+    <%- include('btn_group') %>
+
+    <div class="table_setting">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 5%">選取</th>
+            <th style="width: 5%">編號</th>
+            <th style="width: 10%">圖片</th>
+            <th style="width: 20%">標題</th>
+            <th>風格</th>
+            <th>關聯</th>
+            <th>點閱量</th>
+            <th style="width: 20%">動作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(function(recipe) { %>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="recipe"
+                value="<%= recipe.recipe_uid %>"
+              />
+            </td>
+            <td><%= recipe.recipe_uid %></td>
+            <td>
+              <div class="container">
+                <img src="/../img/recipe/recipe<%= recipe.recipe_uid %>.jpg" />
+              </div>
+            </td>
+
+            <td>
+              <a  href="http://localhost:3001/recipe_section/recipe_page/<%= recipe.recipe_uid %>">
+                <%= recipe.recipe_title %>
+              </a>
+            </td>
+            <td><%= recipe.style_name %></td>
+            <td><%= recipe.related_name %></td>
+            <td><%= recipe.click %></td>
+            <td class="table_btn_group">
+              <a
+                class="btn"
+                href="http://localhost:3001/recipe_section/recipe_page/<%= recipe.recipe_uid %>"
+                target="_blank"
+                >頁面瀏覽</a
+              >
+              <a
+                class="btn"
+                target="_blank"
+                href="/recipe/edit/<%= recipe.recipe_uid %>"
+              >
+                編輯</a
+              >
+              <button class="del">刪除</button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

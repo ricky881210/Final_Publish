@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>導覽列</title>
+    <link rel="stylesheet" href="/nav_bar.css" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      $("#search_toggle").change(function () {
+        if (this.checked) {
+          $(".link_bar").css("margin-right", "0px");
+        } else {
+          $(".link_bar").css("margin-right", "-100px");
+        }
+      });
+      $(".search_button").on("click", function (p) {
+        sessionStorage.setItem("searchFromNav", $(".search_input").val());
+        p.preventDefault();
+        $.ajax({
+          url: "/turning",
+          method: "post",
+          data: {
+            select: $("select").val(),
+            searchInput: $(".search_input").val(),
+          },
+          success: function (res) {
+            window.location = res.reUrl;
+          },
+        });
+      });
+
+      const user = JSON.parse(sessionStorage.getItem("user"));
+
+      // 動態改變導覽列
+      fetch("http://localhost:3000/api/checkSession", {
+        method: "GET",
+        credentials: "include", // 攜帶 Cookie
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.loggedIn) {
+            console.log("User is logged in:"); // 調試信息
+            $(".login_btn")
+              .attr("href", "/user_page")
+              .text("個人頁面")
+              .removeClass("login_btn");
+          } else {
+            console.log("User is not logged in"); // 調試信息
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("檢查登入狀態失敗，請稍後再試");
+        });
+    });
+  </script>
+  <body>
+    <nav id="nav_bar">
+      <div>
+        <a class="nav_logo" href="/home_page">SPICESPHERE</a>
+      </div>
+
+      <label for="toggle" class="hamburger">☰</label>
+
+      <input id="toggle" type="checkbox" />
+      <div id="nav_right">
+        <div class="link_bar">
+          <a href="/recipe_section">探索食譜</a>
+          <a href="/product_section">產品介紹</a>
+          <a href="/payment"
+            >購物車
+            <span id="brackets">(<span id="nav_cart_count">0</span>)</span></a
+          >
+          <a class="login_btn" href="/login">會員登入</a>
+        </div>
+        <div class="search_bar">
+          <input id="search_toggle" type="checkbox" />
+          <select>
+            <option value="recipe">食譜</option>
+            <option value="product">商品</option>
+          </select>
+          <input class="search_input" type="text" />
+          <button class="search_button">搜索</button>
+          <label for="search_toggle">
+            <svg
+              width="30px"
+              height="35px"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              color="#FCFCFC"
+            >
+              <path
+                d="M17 17L21 21"
+                stroke="#FCFCFC"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z"
+                stroke="#FCFCFC"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </label>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>異鍋豐|登入頁</title>
+    <link rel="stylesheet" href="/login.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+</head>
+<script>
+$(document).ready(function() {
+    function togglePasswordVisibility() {
+        let passwordField = $(this).prev('input[type="password"], input[type="text"]');
+        let passwordFieldType = passwordField.attr('type');
+        let eyeIcon = $(this).find('svg');
+        
+        if (passwordFieldType === 'password') {
+            passwordField.attr('type', 'text');
+            eyeIcon.css('fill', 'var(--main_orange)');
+        } else {
+            passwordField.attr('type', 'password');
+            eyeIcon.css('fill', 'var(--border_gray)');
+        }
+    }
+
+    // Use event delegation for dynamically created elements
+    $(document).on('click', '.eye', togglePasswordVisibility);
+
+    $('#register').on('click', function() {
+        $('#login_bg').html(`
+            <div class="text">歡迎註冊！請填寫以下資訊。</div>
+            <div class="login_section">
+                <div class="title">註冊</div>
+                <input class="register_input" id="user_name"  maxlength="10" placeholder="請輸入姓名">
+                <input class="register_input" type="email" id="email" placeholder="請輸入電子信箱">
+                <input class="register_input" id="new_account"  maxlength="20" placeholder="請輸入帳號">
+                <input class="register_input" type="password" id="new_password"  maxlength="20" placeholder="請輸入新密碼">
+                <div class="eye">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>
+                </div>
+                <input class="register_input" type="password" id="confirm_password"  maxlength="20" placeholder="請確認新密碼">
+                <div class="eye">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+                    </svg>
+                </div>
+            <div class="checkbox_container"><input id="agreetmant" type="checkbox" >我接受<span id="terms">服務條款</span> <input id="subscribe" type="checkbox" checked>我想收到最新消息 </div>
+            <div id="terms_modal" class="modal">
+            <div class="modal_content"><span class="close">&times;</span><p>
+                <p>這裡是服務條款的內容</p>
+                語言古代基地圖書及時活動壓縮範圍之一刪除犯罪，刷新留學，有一定特價模樣準確最高臺中考核，春天降低眼光演唱藍色做出不肯完成，金屬味道開展老公輔助計算台鐵推坑王擴大連載公主，儘快本網網際方法實行，而來網域名稱讓他幸福，豪華都沒，領導的錢轉帖各種，職務明顯，尺                語言古代基地圖書及時活動壓縮範圍之一刪除犯罪，刷新留學，有一定特價模樣準確最高臺中考核，春天降低眼光演唱藍色做出不肯完成，金屬味道開展老公輔助計算台鐵推坑王擴大連載公主，儘快本網網際方法實行，而來網域名稱讓他幸福，豪華都沒，領導的錢轉帖各種，職務明顯，尺                語言古代基地圖書及時活動壓縮範圍之一刪除犯罪，刷新留學，有一定特價模樣準確最高臺中考核，春天降低眼光演唱藍色做出不肯完成，金屬味道開展老公輔助計算台鐵推坑王擴大連載公主，儘快本網網際方法實行，而來網域名稱讓他幸福，豪華都沒，領導的錢轉帖各種，職務明顯，尺                語言古代基地圖書及時活動壓縮範圍之一刪除犯罪，刷新留學，有一定特價模樣準確最高臺中考核，春天降低眼光演唱藍色做出不肯完成，金屬味道開展老公輔助計算台鐵推坑王擴大連載公主，儘快本網網際方法實行，而來網域名稱讓他幸福，豪華都沒，領導的錢轉帖各種，職務明顯，尺                語言古代基地圖書及時活動壓縮範圍之一刪除犯罪，刷新留學，有一定特價模樣準確最高臺中考核，春天降低眼光演唱藍色做出不肯完成，金屬味道開展老公輔助計算台鐵推坑王擴大連載公主，儘快本網網際方法實行，而來網域名稱讓他幸福，豪華都沒，領導的錢轉帖各種，職務明顯，尺。
+                </p></div></div>   
+                <button id="submit_register">提交</button>
+                <a class="back" href="/login">回到登入</a>
+            </div>
+        `);
+    });
+    
+    $(document).on('click', '#terms', function() {
+        $('#terms_modal').css('display', 'block');
+    });
+
+    $(document).on('click', '.close', function() {
+        $('#terms_modal').css('display', 'none');
+    });
+
+    $(window).on('click', function(event) {
+        if ($(event.target).is('#terms_modal')) {
+            $('#terms_modal').css('display', 'none');
+        }
+    });
+
+
+    $(document).on('click', '#submit_register', function() {
+    const userName = $('#user_name').val();
+    const email = $('#email').val();
+    const account = $('#new_account').val();
+    const password = $('#new_password').val();
+    const confirmPassword = $('#confirm_password').val();
+    const agreementChecked = $('#agreetmant').is(':checked');
+
+    if (!userName || !email || !account || !password) {
+        alert('姓名、信箱、帳號和密碼都不能為空');
+        return;
+    }
+
+    if (!agreementChecked) {
+        alert('請同意服務條款');
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert('密碼不一致，請重新確認');
+        return;
+    }
+
+
+    console.log({ userName, email, account, password  });
+
+    fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userName, email, account, password  })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message);
+        if (data.message === '註冊成功') {
+            window.location.href = '/login';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('註冊失敗，請稍後再試');
+    });
+});
+
+$('#login').on('click', function() {
+  const account = $('#account').val();
+  const password = $('#password').val();
+
+  fetch('http://localhost:3000/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include',
+    body: JSON.stringify({ account, password })
+  })
+  .then(response => response.json())
+  .then(data => {
+    alert(data.message);
+    if (data.message === '登入成功') {
+      window.location.href = '/home_page'; // 登入成功後重新加載主頁
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('登入失敗，請稍後再試');
+  });
+});
+    
+    $('#forget').on('click',function(){
+    $('.login_section').html(`
+<div class="title">忘記密碼</div>
+                <input  id="new_account"  maxlength="20" placeholder="請輸入帳號">
+                <input  type="email" placeholder="請輸入電子信箱">
+                <div>提交後，我們會將密碼寄至您的電子信箱</div>
+                <button id="submit_forget">提交</button>
+                <a class="back" href="/login">回到登入</a>
+            </div>
+    `)
+})
+});
+
+
+
+</script>
+<body>
+
+    <div id="login_bg">
+        <div class="text">At SpiceSphere 異鍋豐, we believe that sharing a love for food connects people worldwide. Dive into our rich collection of international recipes and bring global flavors to your kitchen. Explore, cook, and share your culinary creations with our community. Let's make every meal an adventure!</div>
+        <div class="login_section">
+            <div class="title">登入</div>
+           <input id="account" maxlength="20" placeholder="請輸入帳號">
+           <input type="password" id="password" maxlength="20" placeholder="請輸入密碼">
+          <div class="eye">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/>
+                <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/>
+              </svg>
+          </div> 
+           <div id="forget" class="small ">忘記密碼嗎?</div>
+           
+            <button id="login">登入</button> 
+            <div class="small">新朋友嗎?</div>
+            <button id="register">註冊</button>
+            <a class="back" href="http://localhost:3000/login">前往後台</a></div>
+           </div>
+        </div>
+    </div>
+
+
+
+    <%- include('footer') %>
+    
+</body>
+</html>

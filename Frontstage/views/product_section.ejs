@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>異鍋豐|商品區</title>
+    <link rel="stylesheet" href="/product_section.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    window.onload = () => {
+      const searchFromNav = sessionStorage.getItem("searchFromNav");
+      if (searchFromNav) {
+        $("#search_input").val(searchFromNav);
+        sessionStorage.removeItem("searchFromNav");
+      }
+
+      let currentPage = 1;
+      const cardsPerPage = 12;
+      let filteredCards;
+
+      function filterCards() {
+        let searchInput = $("#search_input").val().toLowerCase();
+        let maxPrice = parseInt($("#price_range").val());
+        let checkedValues = $(
+          '.checkbox_container input[type="checkbox"]:checked'
+        )
+          .map(function () {
+            return $(this).val();
+          })
+          .get();
+
+        filteredCards = $(".card").filter(function () {
+          let card = $(this);
+          let cardName = card.find(".card_name").text().trim().toLowerCase();
+          let cardPrice = parseInt(
+            card.find(".card_price").text().replace("$", "").trim()
+          );
+          let cardClass = card.attr("value").split(",");
+
+          let matchesSearch = cardName.includes(searchInput);
+          let matchesPrice = cardPrice <= maxPrice;
+          let matchesClass =
+            checkedValues.length === 0 ||
+            cardClass.some((cls) => checkedValues.includes(cls.trim()));
+
+          return matchesSearch && matchesPrice && matchesClass;
+        });
+
+        currentPage = 1;
+        displayCards();
+      }
+
+      function pageChangeBtn() {
+        let pageCount = Math.ceil(filteredCards.length / cardsPerPage);
+        let str = "";
+
+        str += `<li><button class="pageBtn" data-page="1">1</button></li>`;
+
+        if (currentPage > 3) {
+          str += `<li>...</li>`;
+        }
+
+        for (
+          let i = Math.max(2, currentPage - 1);
+          i <= Math.min(pageCount - 1, currentPage + 1);
+          i++
+        ) {
+          str += `<li><button class="pageBtn" data-page="${i}">${i}</button></li>`;
+        }
+
+        if (currentPage < pageCount - 2) {
+          str += `<li>...</li>`;
+        }
+
+        if (pageCount > 1) {
+          str += `<li><button class="pageBtn" data-page="${pageCount}">${pageCount}</button></li>`;
+        }
+
+        $(".pageChangeBtn").html(str);
+
+        $(".pageBtn").on("click", function () {
+          currentPage = parseInt($(this).data("page"));
+          displayCards();
+          $("html, body").animate(
+            {
+              scrollTop: $("#main_section").offset().top,
+            },
+            1000
+          );
+        });
+      }
+
+      filteredCards = $(".card");
+      displayCards();
+
+      $("#search_btn").on("click", filterCards);
+      $("#price_range").on("input", filterCards);
+      $('.checkbox_container input[type="checkbox"]').on("change", filterCards);
+
+      // 初始化篩選
+      filterCards();
+
+      // 獲取 URL 參數
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get("category");
+
+      function displayCards() {
+  $(".card").hide();
+  let startIndex = (currentPage - 1) * cardsPerPage;
+  let endIndex = startIndex + cardsPerPage;
+
+  if (filteredCards.length === 0) {
+    $("#no_results").show();
+  } else {
+    $("#no_results").hide();
+    filteredCards.slice(startIndex, endIndex).show();
+  }
+  pageChangeBtn();
+}
+
+    };
+
+    $(document).ready(function () {
+      $(".range_container").on("input change", function () {
+        $("#now_price").text("$ " + $(this).val());
+      });
+
+      function updateNavBarCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.length;
+        if (cartCount === 0) {
+          $("#brackets").hide();
+        } else {
+          $("#nav_cart_count").text(cartCount);
+          $("#brackets").show();
+        }
+      }
+
+      // 初始化 nav_bar 購物車數量
+      updateNavBarCartCount();
+    });
+    
+  </script>
+
+  <body>
+    <%- include('nav_bar') %>
+
+    <div id="slogan_section">
+      <div id="bigPictureText">
+        <p>COOKING</p>
+        <p>
+          High-quality cooking wear, such as non-stick pans and stainless steel
+          pots, enhances the culinary experience by providing durability, even
+          heat distribution, and easy cleanup.
+        </p>
+      </div>
+    </div>
+
+    <div id="main_section">
+      <div id="main_section_search">
+        <div class="search_bar">
+          <input id="search_input" type="text" placeholder="搜尋" />
+          <button id="search_btn">
+            <svg
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              color="#ff0000"
+            >
+              <path
+                d="M17 17L21 21"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <path
+                d="M3 11C3 15.4183 6.58172 19 11 19C13.213 19 15.2161 18.1015 16.6644 16.6493C18.1077 15.2022 19 13.2053 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11Z"
+                stroke="#000000"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="main_section_title price">
+          <div class="section_title">價格</div>
+          <div class="range_labels">
+            <span>$ 0</span>
+            <span id="now_price">$ 5000</span>
+            <span id="max_price">$ 10000</span>
+          </div>
+          <input
+            id="price_range"
+            class="range_container"
+            type="range"
+            min="0"
+            max="10000"
+            step="200"
+            value="5000"
+          />
+        </div>
+
+        <div class="main_section_title check">
+          <div class="section_title">用途</div>
+          <div class="checkbox_container">
+            <div>
+              <input type="checkbox" id="food" value="食材" /><label for="food"
+                >食材</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="seasoning" value="調味料" /><label
+                for="seasoning"
+                >調味料</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="package" value="調理包" /><label
+                for="package"
+                >調理包</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="spoon" value="調羹" /><label
+                for="spoon"
+                >調羹</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="cookware" value="鍋具" /><label
+                for="cookware"
+                >鍋具</label
+              >
+            </div>
+            <div>
+              <input type="checkbox" id="cleaning" value="清潔用品" /><label
+                for="cleaning"
+                >清潔用品</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="main_section_product_cards">
+        <div id="no_results">找不到符合條件的商品</div>
+        <% items.forEach(function(product) { %>
+        <div class="card" value="<%= product.related_name %>">
+          <a
+            target="_blank"
+            href="/product_section/product_page/<%= product.product_uid %>"
+          >
+            <div class="card_img">
+              <img
+                src="../../img/product/product<%= product.product_uid %>.jpg"
+              />
+              <div class="card_description"><%= product.full_describe %></div>
+            </div>
+            <div class="card_name"><%= product.product_title %></div>
+            <span class="rating">
+              <% for(let i=1; i <=5; i++) { %> <% if(i <=product.product_rating)
+              { %>
+              <span>★</span>
+              <% } else { %>
+              <span>☆</span>
+              <% } %> <% } %>
+              <span>(<%= product.sales_amount %> )</span>
+            </span>
+            <div class="card_price">$ <%= product.price %></div>
+          </a>
+        </div>
+        <% }); %>
+      </div>
+      <div id="pageChange">
+        <ul class="pageChangeBtn"></ul>
+      </div>
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

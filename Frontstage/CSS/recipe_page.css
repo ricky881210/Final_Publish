@@ -1,0 +1,775 @@
+@charset "UTF-8";
+body {
+  box-sizing: border-box;
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-button {
+  display: none;
+}
+body::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--main_orange);
+  border-radius: 4px;
+  border: none;
+}
+body::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
+:root {
+  --main_orange: rgb(243, 121, 36);
+  --text_withe: rgb(255, 255, 255);
+  --text_black: rgb(53, 53, 53);
+  --border_gray: rgb(128, 128, 128);
+  --bg_opacity_black: rgba(0, 0, 0, 0.6);
+}
+
+a {
+  text-decoration: none;
+}
+
+#recipe_info {
+  width: 1000px;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recipe_info .img_container {
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  margin-top: 50px;
+}
+#recipe_info .img_container img {
+  width: 1000px;
+  height: 500px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#recipe_info .info_rating {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+#recipe_info .info_rating .rating {
+  width: 400px;
+  display: flex;
+  align-items: flex-end;
+}
+#recipe_info .info_rating .rating #star_container {
+  margin-top: -40px;
+}
+#recipe_info .info_rating .rating #star_container .star {
+  display: inline-flex;
+  flex-direction: row-reverse;
+}
+#recipe_info .info_rating .rating #star_container .star > label {
+  font-size: 40px;
+}
+#recipe_info .info_rating .rating #star_container .star > label::after {
+  content: "☆";
+}
+#recipe_info .info_rating .rating #star_container .star > label:hover {
+  cursor: pointer;
+}
+#recipe_info .info_rating .rating #star_container .star > label:hover::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#recipe_info .info_rating .rating #star_container .star > label:hover ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#recipe_info .info_rating .rating #star_container .star > input {
+  display: none;
+}
+#recipe_info .info_rating .rating #star_container .star > input:checked + label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#recipe_info .info_rating .rating #star_container .star > input:checked ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#recipe_info .info_rating .tag {
+  width: 400px;
+  display: flex;
+  justify-content: space-between;
+}
+#recipe_info .info_rating .tag span {
+  color: var(--main_orange);
+  border: 2px solid var(--main_orange);
+  border-radius: 25px;
+  padding: 3px 15px;
+}
+#recipe_info .info_rating .label_like {
+  cursor: pointer;
+}
+#recipe_info .info_rating .bi {
+  display: none;
+  width: 30px;
+  height: 30px;
+  color: tomato;
+  text-align: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#recipe_info .info_rating .bi-heart {
+  display: inline;
+}
+#recipe_info .info_rating label:hover .bi-heart,
+#recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart {
+  display: none;
+}
+#recipe_info .info_rating label:hover .bi-heart-fill,
+#recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart-fill {
+  display: inline;
+}
+#recipe_info .info_rating input {
+  display: none;
+}
+#recipe_info .info_time {
+  width: 1000px;
+  display: flex;
+  justify-content: space-around;
+  font-weight: 900;
+  font-size: 18px;
+  margin-top: 20px;
+}
+#recipe_info .info_describe {
+  margin-top: 20px;
+  width: 95%;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+
+#recipe_ingredient {
+  margin-top: 50px;
+  display: flex;
+  width: 800px;
+  justify-content: space-between;
+}
+#recipe_ingredient .title {
+  text-align: center;
+  font-weight: 900;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+#recipe_ingredient .title .title_small {
+  font-weight: 600;
+  font-size: 16px;
+}
+#recipe_ingredient .ingredients {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recipe_ingredient .ingredients .side_dishes {
+  color: tomato;
+}
+#recipe_ingredient .ingredients span {
+  margin: 3px 0;
+  font-weight: 600;
+}
+#recipe_ingredient .prodcut img {
+  width: 300px;
+  height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+#step {
+  margin-bottom: 50px;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#step .step_line {
+  font-weight: 900;
+  font-size: 50px;
+  width: 60%;
+  position: relative;
+  text-align: center;
+  line-height: 2em;
+}
+#step .step_line::before, #step .step_line::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 60%;
+  height: 3px;
+  background: black;
+}
+#step .step_line::before {
+  left: 0;
+  transform: translateX(-50%);
+  border-left: 10px solid black;
+}
+#step .step_line::after {
+  right: 0;
+  transform: translateX(50%);
+  border-right: 10px solid black;
+}
+#step .step_text {
+  width: 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 18px;
+}
+#step .step_text:nth-child(odd) {
+  align-self: flex-end;
+}
+#step .step_text:nth-child(even) {
+  align-self: flex-start;
+}
+#step .step_text .num {
+  font-weight: 900;
+  font-size: 38px;
+  margin-bottom: 20px;
+  color: var(--main_orange);
+}
+
+#recommend_section {
+  margin-bottom: 50px;
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recommend_section .title {
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+#recommend_section .recipe_cards {
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+}
+#recommend_section .recipe_cards .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recommend_section .recipe_cards .card img {
+  width: 200px;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-bottom: 20px;
+}
+#recommend_section .recipe_cards .card .card_text {
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+#recommend_section .recipe_cards .card .card_text:hover {
+  color: var(--main_orange);
+}
+#recommend_section .recipe_cards .card div {
+  color: var(--main_orange);
+}
+
+@media screen and (max-width: 1000px) {
+  #recipe_info {
+    width: 600px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recipe_info .img_container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
+  }
+  #recipe_info .img_container img {
+    width: 100%;
+    height: 300px;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #recipe_info h1 {
+    font-size: 26px;
+  }
+  #recipe_info .info_rating {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  #recipe_info .info_rating .rating {
+    width: 400px;
+    display: flex;
+    align-items: flex-end;
+  }
+  #recipe_info .info_rating .rating #star_container {
+    margin-top: -40px;
+  }
+  #recipe_info .info_rating .rating #star_container .star {
+    display: inline-flex;
+    flex-direction: row-reverse;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label {
+    font-size: 35px;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label::after {
+    content: "☆";
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover {
+    cursor: pointer;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > input {
+    display: none;
+  }
+  #recipe_info .info_rating .rating #star_container .star > input:checked + label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > input:checked ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .tag {
+    width: 400px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #recipe_info .info_rating .tag span {
+    font-size: 16px;
+    color: var(--main_orange);
+    border: 2px solid var(--main_orange);
+    border-radius: 25px;
+    padding: 3px 15px;
+  }
+  #recipe_info .info_rating .bi {
+    display: none;
+    width: 30px;
+    height: 30px;
+    color: tomato;
+    text-align: center;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  #recipe_info .info_rating .bi-heart {
+    display: inline;
+  }
+  #recipe_info .info_rating label:hover .bi-heart,
+  #recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart {
+    display: none;
+  }
+  #recipe_info .info_rating label:hover .bi-heart-fill,
+  #recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart-fill {
+    display: inline;
+  }
+  #recipe_info .info_rating input {
+    display: none;
+  }
+  #recipe_info .info_time {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    font-weight: 900;
+    font-size: 18px;
+    margin-top: 20px;
+  }
+  #recipe_info .info_describe {
+    margin-top: 20px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #recipe_ingredient {
+    margin-top: 50px;
+    display: flex;
+    width: 600px;
+    justify-content: space-between;
+  }
+  #recipe_ingredient .title {
+    text-align: center;
+    font-weight: 900;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  #recipe_ingredient .ingredients {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recipe_ingredient .ingredients span {
+    margin: 3px 0;
+    font-weight: 600;
+  }
+  #recipe_ingredient .prodcut img {
+    width: 250px;
+    height: 250px;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #step {
+    margin-bottom: 50px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #step .step_line {
+    font-weight: 900;
+    font-size: 40px;
+    width: 50%;
+    position: relative;
+    text-align: center;
+    line-height: 2em; /* 調整這個值以改變文字與線的距離 */
+  }
+  #step .step_line::before, #step .step_line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 60%;
+    height: 3px; /* 調整這個值以改變線的粗細 */
+    background: black; /* 調整這個值以改變線的顏色 */
+  }
+  #step .step_line::before {
+    left: 0;
+    transform: translateX(-50%);
+    border-left: 10px solid black; /* 調整這個值以改變箭頭的大小和顏色 */
+  }
+  #step .step_line::after {
+    right: 0;
+    transform: translateX(50%);
+    border-right: 10px solid black; /* 調整這個值以改變箭頭的大小和顏色 */
+  }
+  #step .step_text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #step .step_text .num {
+    font-weight: 900;
+    font-size: 28px;
+    color: var(--main_orange);
+  }
+  #recommend_section {
+    margin-bottom: 50px;
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .title {
+    font-weight: 900;
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+  #recommend_section .recipe_cards {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  #recommend_section .recipe_cards .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .recipe_cards .card img {
+    width: 150px;
+    height: 150px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    margin-bottom: 20px;
+  }
+  #recommend_section .recipe_cards .card .card_text {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  #recommend_section .recipe_cards .card .card_text:hover {
+    color: var(--main_orange);
+  }
+  #recommend_section .recipe_cards .card div {
+    color: var(--main_orange);
+  }
+}
+@media screen and (max-width: 650px) {
+  #recipe_info {
+    width: 300px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recipe_info .img_container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
+  }
+  #recipe_info .img_container img {
+    width: 100%;
+    height: 300px;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #recipe_info h1 {
+    font-size: 18px;
+  }
+  #recipe_info .info_rating {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+  #recipe_info .info_rating .rating {
+    width: 140px;
+    display: flex;
+    align-items: flex-end;
+  }
+  #recipe_info .info_rating .rating #star_container {
+    width: 100%;
+    margin-top: -40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  #recipe_info .info_rating .rating #star_container .star {
+    display: inline-flex;
+    flex-direction: row-reverse;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label {
+    font-size: 25px;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label::after {
+    content: "☆";
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover {
+    cursor: pointer;
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > label:hover ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > input {
+    display: none;
+  }
+  #recipe_info .info_rating .rating #star_container .star > input:checked + label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .rating #star_container .star > input:checked ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #recipe_info .info_rating .tag {
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #recipe_info .info_rating .tag span {
+    display: flex;
+    font-size: 14px;
+    color: var(--main_orange);
+    border: 2px solid var(--main_orange);
+    border-radius: 25px;
+    padding: 3px 15px;
+  }
+  #recipe_info .info_rating .bi {
+    display: none;
+    width: 30px;
+    height: 30px;
+    color: tomato;
+    text-align: center;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  #recipe_info .info_rating .bi-heart {
+    display: inline;
+  }
+  #recipe_info .info_rating label:hover .bi-heart,
+  #recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart {
+    display: none;
+  }
+  #recipe_info .info_rating label:hover .bi-heart-fill,
+  #recipe_info .info_rating input[type=checkbox]:checked + label .bi-heart-fill {
+    display: inline;
+  }
+  #recipe_info .info_rating input {
+    display: none;
+  }
+  #recipe_info .info_time {
+    width: 100%;
+    display: flex;
+    font-weight: 900;
+    font-size: 14px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  #recipe_info .info_time div {
+    text-align: center;
+    width: 50%;
+  }
+  #recipe_info .info_describe {
+    margin-top: 20px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #recipe_ingredient {
+    margin-top: 50px;
+    display: flex;
+    width: 300px;
+    justify-content: space-between;
+  }
+  #recipe_ingredient .title {
+    text-align: center;
+    font-weight: 900;
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+  #recipe_ingredient .ingredients {
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recipe_ingredient .ingredients span {
+    margin: 3px 0;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  #recipe_ingredient .prodcut img {
+    width: 140px;
+    height: 140px;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #step {
+    margin-bottom: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #step .step_line {
+    font-weight: 900;
+    font-size: 25px;
+    width: 50%;
+    position: relative;
+    text-align: center;
+    line-height: 2em; /* 調整這個值以改變文字與線的距離 */
+  }
+  #step .step_line::before, #step .step_line::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 3px; /* 調整這個值以改變線的粗細 */
+    background: black; /* 調整這個值以改變線的顏色 */
+  }
+  #step .step_line::before {
+    left: 0;
+    transform: translateX(-50%);
+    border-left: 10px solid black; /* 調整這個值以改變箭頭的大小和顏色 */
+  }
+  #step .step_line::after {
+    right: 0;
+    transform: translateX(50%);
+    border-right: 10px solid black; /* 調整這個值以改變箭頭的大小和顏色 */
+  }
+  #step .step_text {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  #step .step_text .num {
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--main_orange);
+  }
+  #recommend_section {
+    margin-bottom: 50px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .title {
+    font-weight: 900;
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+  #recommend_section .recipe_cards {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  #recommend_section .recipe_cards .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .recipe_cards .card img {
+    width: 90px;
+    height: 100px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    margin-bottom: 20px;
+  }
+  #recommend_section .recipe_cards .card .card_text {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  #recommend_section .recipe_cards .card .card_text:hover {
+    color: var(--main_orange);
+  }
+  #recommend_section .recipe_cards .card div {
+    color: var(--main_orange);
+  }
+}/*# sourceMappingURL=recipe_page.css.map */

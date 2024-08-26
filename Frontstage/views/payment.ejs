@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>異鍋豐|付款頁面</title>
+    <link rel="stylesheet" href="/payment.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      // 更新購物車數量
+      function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        $("#cart_count").text(cart.length);
+      }
+
+      // 更新 nav_bar 購物車數量
+      function updateNavBarCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.length;
+        if (cartCount === 0) {
+          $("#brackets").hide();
+        } else {
+          $("#nav_cart_count").text(cartCount);
+          $("#brackets").show();
+        }
+      }
+
+      // 渲染購物車內容
+      function renderCart() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartContainer = $(".cart_item");
+        cartContainer.empty(); // 清空現有的購物車內容
+
+        let totalAmount = 0;
+        const shippingFee = 100;
+
+        cart.forEach((item, index) => {
+          const itemTotal = item.product_price * item.product_quantity;
+          totalAmount += itemTotal;
+
+          const cartItem = `
+        <div class="card">
+          <div class="order">${index + 1}</div>
+          <a href=""> <img src="../../img/product/product${
+            item.product_uid
+          }.jpg"></a>
+          <div class="card_info">
+            <a href=""><div>${item.product_title}</div></a>
+            <div class="price">$ ${item.product_price}</div>
+          </div>
+          <div class="card_btn">
+            <div class="btn_btn">
+              <button class="munis">-</button>
+              <span class="product_quanity">${item.product_quantity}</span>
+              <button class="add">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+          cartContainer.append(cartItem);
+        });
+
+        // 更新商品總金額和運費
+        $(".money div:nth-child(1) span:last-child").text(`$ ${totalAmount}`);
+        $(".money div:nth-child(2) span:last-child").text(`$ ${shippingFee}`);
+        $(".money .total span:last-child").text(
+          `$ ${totalAmount + shippingFee}`
+        );
+
+        // 同步更新 nav_bar 購物車數量
+        updateNavBarCartCount();
+      }
+
+      // 初始化購物車數量和內容
+      updateCartCount();
+      updateNavBarCartCount();
+      renderCart();
+
+      // 監聽 .add 按鈕的點擊事件
+      $(document).on("click", ".add", function () {
+        const index = $(this).closest(".card").index();
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart[index].product_quantity += 1;
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      });
+
+      // 監聽 .munis 按鈕的點擊事件
+      $(document).on("click", ".munis", function () {
+        const index = $(this).closest(".card").index();
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        if (cart[index].product_quantity > 1) {
+          cart[index].product_quantity -= 1;
+        } else {
+          cart.splice(index, 1); // 如果數量為 1，則從購物車中移除該商品
+        }
+        localStorage.setItem("cart", JSON.stringify(cart));
+        renderCart();
+      });
+
+      // 生成隨機 order_id
+      function generateOrderId() {
+        return "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+      }
+
+      // 獲取用戶信息
+      fetch("http://localhost:3000/api/checkSession", {
+        method: "GET",
+        credentials: "include", // 攜帶 Cookie
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.loggedIn) {
+            const user = data.user;
+
+            // 用戶已登入，根據 user.user_account 從資料庫中獲取收件資訊
+            fetch(`http://localhost:3000/api/getUserInfo/${user.user_account}`)
+              .then((response) => response.json())
+              .then((data) => {
+                if (data.message) {
+                  alert(data.message);
+                } else {
+                  // 填充表單
+                  $("#who").val(data.user_name);
+                  $("#phone").val(data.phone);
+                  $("#mail").val(data.e_mail);
+                  $("#zip").val(data.zip);
+                  $("#city").val(data.city);
+                  $("#district").val(data.district);
+                  $("#road").val(data.road);
+                  $("#number").val(data.number);
+                }
+              })
+              .catch((error) => {
+                console.error("Error:", error);
+                alert("獲取用戶資訊失敗，請稍後再試");
+              });
+          } else {
+            console.log("User is not logged in"); // 調試信息
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("檢查登入狀態失敗，請稍後再試");
+        });
+
+      // 監聽結帳按鈕的點擊事件
+      fetch("http://localhost:3000/api/checkSession", {
+        method: "GET",
+        credentials: "include", // 攜帶 Cookie
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.loggedIn) {
+            const user = data.user;
+
+            $("#pay").on("click", function () {
+              // 檢查收件地址和付款方式是否填寫
+              const who = $("#who").val().trim();
+              const phone = $("#phone").val().trim();
+              const mail = $("#mail").val().trim();
+              const zip = $("#zip").val().trim();
+              const city = $("#city").val().trim();
+              const district = $("#district").val().trim();
+              const road = $("#road").val().trim();
+              const number = $("#number").val().trim();
+              const payment = $('input[name="payment"]:checked').val();
+
+              if (
+                !who ||
+                !phone ||
+                !mail ||
+                !zip ||
+                !city ||
+                !district ||
+                !road ||
+                !number ||
+                !payment
+              ) {
+                alert("請填寫完整的收件地址和選擇付款方式");
+              } else {
+                // 已經登入且填寫完整，將資訊發送到後端
+                const orderId = generateOrderId();
+                const orderData = {
+                  order_id: orderId,
+                  user: user.user_account,
+                  address: {
+                    who: who,
+                    phone: phone,
+                    mail: mail,
+                    zip: zip,
+                    city: city,
+                    district: district,
+                    road: road,
+                    number: number,
+                  },
+                  payment: payment,
+                  cart: JSON.parse(localStorage.getItem("cart")),
+                };
+
+                $.ajax({
+                  url: "http://localhost:3000/api/orders",
+                  method: "POST",
+                  contentType: "application/json",
+                  data: JSON.stringify(orderData),
+                  success: function (response) {
+                    alert(`結帳成功！您的訂單單號是：${orderId}`);
+                    // 清空購物車
+                    localStorage.removeItem("cart");
+                    renderCart();
+                  },
+                  error: function (error) {
+                    alert("結帳失敗，請稍後再試");
+                  },
+                });
+              }
+            });
+          } else {
+            // 如果沒有登入，導向登入頁面
+            alert("請先登入");
+            window.location.href = "/login";
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("檢查登入狀態失敗，請稍後再試");
+        });
+    });
+  </script>
+  <body>
+    <%- include('nav_bar') %>
+
+    <div id="container">
+      <div class="user_info">
+        <div class="title">收件地址</div>
+        <div class="address">
+          <div class="row">
+            <div class="group">
+              <label for="who">收件人</label>
+              <input id="who" />
+            </div>
+            <div class="group">
+              <label for="phone">電話</label>
+              <input id="phone" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="group">
+              <label for="mail">電子信箱</label>
+              <input id="mail" />
+            </div>
+            <div class="group">
+              <label for="zip">郵遞區號</label>
+              <input id="zip" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="group">
+              <label for="city">市</label>
+              <input id="city" />
+            </div>
+            <div class="row">
+              <div class="row_row">
+                <div class="group">
+                  <label for="district">區</label>
+                  <input id="district" />
+                </div>
+                <div class="group">
+                  <label for="road">街</label>
+                  <input id="road" />
+                </div>
+                <div class="group">
+                  <label for="number">號</label>
+                  <input id="number" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="title">付款方式</div>
+        <div class="payment">
+          <div class="payment_chose">
+            <div>
+              <input type="radio" name="payment" id="cash" value="cash" />
+              <label for="cash">貨到付款</label>
+            </div>
+            <div>
+              <input type="radio" name="payment" id="credit" value="credit" />
+              <label for="credit">信用卡</label>
+            </div>
+            <div>
+              <input type="radio" name="payment" id="credit2" value="credit2" />
+              <label for="credit2">信用卡分期</label>
+            </div>
+            <div>
+              <input type="radio" name="payment" id="jk" value="jk" />
+              <label for="jk">街口支付</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cart_section">
+        <div class="title">購物車</div>
+        <div class="cart">
+          <div class="cart_item"></div>
+
+          <div class="money">
+            <div><span>商品總金額</span> <span></span></div>
+            <div><span>運費總金額</span> <span></span></div>
+            <div class="total"><span>付款金額</span> <span></span></div>
+          </div>
+
+          <button id="pay">結帳</button>
+        </div>
+      </div>
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

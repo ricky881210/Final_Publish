@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>編輯項目</title>
+  </head>
+  <link rel="stylesheet" href="/backstage.css" />
+  <link rel="stylesheet" href="/add_item.css" />
+  <link rel="icon" href="../../img/common/favicon.ico" />
+  <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      //跳轉事件
+      $("#page").change(function () {
+        var selectedOption = $(this).val();
+        if (selectedOption === "recipe") {
+          window.location.href = "/addRecipe"; // 導向食材路由
+        } else if (selectedOption === "product") {
+          window.location.href = "/addProduct"; // 導向商品路由
+        }
+      });
+
+      // 更新剩餘字數的函數
+      function updateCount() {
+        const inputLength = $(this).val().length;
+        const maxLength = $(this).attr("maxlength");
+        const remaining = maxLength - inputLength;
+        let counter = $(this).next(".counter");
+        if (counter.length === 0) {
+          counter = $('<span class="counter"></span>');
+          $(this).parent().append(counter);
+        }
+        counter.text(`剩餘字數：${remaining}`);
+      }
+
+      // 為每個需要限制字數的欄位添加事件監聽器
+      $("#title, #short_describe, #full_describe, #size").on(
+        "input",
+        updateCount
+      );
+
+        // 頁面加載時更新每個輸入框的剩餘字數
+        $("#title, #short_describe, #full_describe, #size").each(function () {
+        updateCount.call(this);
+      });
+
+      $("#img_upload").change(function () {
+        if (this.files.length > 0) {
+          $("#is_upload")
+            .text("已選擇")
+            .css("background-color", "rgb(75, 181, 67)");
+        } else {
+          $("#is_upload").text("選擇上傳圖片").css("background-color", "");
+        }
+      });
+
+
+      $("#submmit button").click(function (e) {
+  e.preventDefault();
+
+  var uid = $('#uid').val();
+  var data = new FormData();
+  data.append('product_title', $("#title").val());
+  data.append('part_describe', $("#short_describe").val());
+  data.append('full_describe', $("#full_describe").val());
+  data.append('size', $("#size").val());
+  data.append('price', $("#price").val());
+  data.append('inventory', $("#inventory").val());
+  data.append('sales_amount', $("#sales_amount").val());
+  data.append('related', $('select[name="related"]').val());
+  data.append('file', $("#img_upload")[0].files[0]); // 加入圖片的資料
+
+  $.ajax({
+    url: "/product/edit/" + uid, // 伺服器端處理這個請求的路由
+    method: "POST",
+    data: data,
+    processData: false,  // 告訴 jQuery 不要處理數據
+    contentType: false,  // 告訴 jQuery 不要設置 contentType
+    success: function (response) {
+      alert(response.message);
+    },
+  });
+});
+
+
+
+
+// 判斷該留言是否已被提交，改變文字顯示內容
+$("#comment_container .comment").each(function() {
+  const isSubmmit = $(this).data("is-submmit");
+  const button = $(this).find(".comment");
+  button.text(isSubmmit ? "已提交" : "提交");
+  button.addClass(isSubmmit ? "cancel_comment" : "submit_comment");
+});
+
+
+  // 提交商品評論
+  $(document).on("click", ".submit_comment", function() {
+    const commentId = $(this).closest(".comment").data("comment-id");
+    const button = $(this);
+    $.ajax({
+      url: `/product/comments/submit/${commentId}`,
+      type: "POST",
+      success: function(data) {
+        alert(data);
+        button.text("已提交");
+        button.removeClass("submit_comment").addClass("cancel_comment");
+        button.closest(".comment").data("is-submmit", 1);
+      },
+      error: function(xhr, status, error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+
+  // 取消提交商品評論
+  $(document).on("click", ".cancel_comment", function() {
+    const commentId = $(this).closest(".comment").data("comment-id");
+    const button = $(this);
+    $.ajax({
+      url: `/product/comments/cancel/${commentId}`,
+      type: "POST",
+      success: function(data) {
+        alert(data);
+        button.text("提交");
+        button.removeClass("cancel_comment").addClass("submit_comment");
+        button.closest(".comment").data("is-submmit", 0);
+      },
+      error: function(xhr, status, error) {
+        console.error("Error:", error);
+      }
+    });
+  });
+
+    });
+  </script>
+
+  <body>
+    <%- include('nav_bar') %>
+    <div id="item_uid">
+        <span>項目編號 : <%= items.product_uid %> 、 <%= items.product_title %> </span>
+        <hr />
+        <input type="text" id="uid" value="<%= items.product_uid %>" hidden>
+      </div>
+
+    <div id="item_info">
+      <div class="item_container">
+        <div class="item_left">
+          <div>
+            新增商品注意事項
+            <div class="hover">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-question-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+                />
+                <path
+                  d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"
+                />
+              </svg>
+              <div class="hover-content">
+                <p>所有欄位都必須填寫</p>
+                <p>商品的每個型號請使用"@"隔開</p>
+                <p>價格為零表示為贈品，但不得為負數</p>
+                <p>存貨為負數則表示庫存有問題，請盡快查出</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="title">商品名稱 :</label
+            ><input id="title" type="text" maxlength="20" value="<%= items.product_title %>" />
+          </div>
+          <div>
+            <label for="short_describe">短描述 : </label
+            ><textarea
+              id="short_describe"
+              type="text"
+              maxlength="100"
+            ><%= items.part_describe %></textarea>
+          </div>
+          <div>
+            <label for="full_describe">完整描述 : </label
+            ><textarea
+              id="full_describe"
+              type="text"
+              maxlength="300"
+            ><%= items.full_describe %></textarea>
+          </div>
+          <div>
+            <label for="size">商品型號 : </label
+            ><textarea id="size" type="step" maxlength="300"><%= items.size %></textarea>
+          </div>
+        </div>
+
+        <div class="item_mid">
+            <div class="container">
+                <img src="/../img/product/product<%= items.product_uid %>.jpg" />
+              </div>
+          <div>
+            <label for="img_upload">
+              <div class="btn" id="is_upload">選擇上傳圖片</div>
+            </label>
+            <input type="file" id="img_upload" accept=".png, .jpg" />
+          </div>
+          <div>
+            <label for="price">售價 : </label
+            ><input id="price" type="number" min="1" value="<%= items.price %>" />
+          </div>
+          <div>
+            <label for="prepare_time" >存貨數量 : </label
+            ><input id="prepare_time" type="number" min="1" value="<%= items.inventory %>" />
+          </div>
+          <div>
+            <label for="cooking_time">銷售數量 : </label
+            ><input id="cooking_time" type="number" min="1" value="<%= items.sales_amount %>" />
+          </div>
+          <div>
+            <label>商品關聯 : </label>
+            <select name="related">
+              <option value="" selected hidden>選擇關聯</option>
+              <option <%= items.related == 1 ? 'selected' : '' %> value="1">食材</option>
+              <option <%= items.related == 2 ? 'selected' : '' %> value="2">調味料</option>
+              <option <%= items.related == 3 ? 'selected' : '' %> value="3">調理包</option>
+              <option <%= items.related == 4 ? 'selected' : '' %> value="4">碗具</option>
+              <option <%= items.related == 5 ? 'selected' : '' %> value="5">鍋具</option>
+            </select>
+          </div>
+        </div>
+
+        
+        </div>
+      </div>
+
+      
+      <div id="submmit">
+        <button>編輯商品</button>
+      </div>
+
+      
+      <div class="comment_section">
+        <div class="title">留言控制</div>
+        <div id="comment_container">
+          <% comments.forEach(comment => { %>
+            <div data-comment-id="<%= comment.comment_uid %>" data-is-submmit="<%= comment.is_submmit %>" class="comment">
+              <span class="account"><%= comment.user_account %></span>
+              <span><%= comment.formatted_date %></span>
+              <span class="rating">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <% if(i <= comment.product_rating) { %>
+                    <span>★</span>
+                  <% } else { %>
+                    <span>☆</span>
+                  <% } %>
+                <% } %>
+              </span>
+              <button class="comment">提交</button>
+              <div><%= comment.product_comment %></div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+
+    </div>
+    <%- include('footer') %>
+  </body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>異鍋豐|<%= items[0].recipe_title %></title>
+    <link rel="stylesheet" href="/recipe_page.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      function updateNavBarCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.length;
+        if (cartCount === 0) {
+          $("#brackets").hide();
+        } else {
+          $("#nav_cart_count").text(cartCount);
+          $("#brackets").show();
+        }
+      }
+
+      // 初始化 nav_bar 購物車數量
+      updateNavBarCartCount();
+
+      // 獲取用戶信息
+      fetch("http://localhost:3000/api/checkSession", {
+        method: "GET",
+        credentials: "include", // 攜帶 Cookie
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.loggedIn) {
+            const user = data.user;
+            const recipe_uid = "<%= items[0].recipe_uid %>"; // 從後端渲染的數據中獲取 recipe_uid
+
+            // 檢查是否已收藏
+            $.ajax({
+              url: "http://localhost:3000/api/favorite",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({
+                user_account: user.user_account,
+                recipe_uid: recipe_uid,
+                action: "check",
+              }),
+              success: function (data) {
+                if (data.isFavorite) {
+                  $("#like").prop("checked", true);
+                }
+              },
+              error: function (err) {
+                console.error("Error:", err);
+              },
+            });
+
+            // 收藏/取消收藏功能
+            $("#like").on("change", function () {
+              const action = this.checked ? "add" : "remove";
+              $.ajax({
+                url: "http://localhost:3000/api/favorite",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                  user_account: user.user_account,
+                  recipe_uid: recipe_uid,
+                  action: action,
+                }),
+                success: function (data) {
+                  alert(data.message);
+                },
+                error: function (err) {
+                  console.error("Error:", err);
+                },
+              });
+            });
+          } else {
+            console.log("User is not logged in"); // 調試信息
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("檢查登入狀態失敗，請稍後再試");
+        });
+    });
+  </script>
+  <body>
+    <%- include('nav_bar') %>
+    <div id="recipe_info">
+      <div class="img_container">
+        <img src="../../img/recipe/recipe<%= items[0].recipe_uid %>.jpg" />
+      </div>
+
+      <h1><%= items[0].recipe_title %></h1>
+
+      <div class="info_rating">
+        <div class="rating">
+          <div id="star_container">
+            <div class="star">
+              <input type="radio" name="star" id="score5" value="5" <%=
+              items[0].recipe_rating == 5 ? 'checked' : '' %> />
+              <label class="star" for="score5"></label>
+
+              <input type="radio" name="star" id="score4" value="4" <%=
+              items[0].recipe_rating == 4 ? 'checked' : '' %>/>
+              <label class="star" for="score4"></label>
+
+              <input type="radio" name="star" id="score3" value="3" <%=
+              items[0].recipe_rating == 3 ? 'checked' : '' %>/>
+              <label class="star" for="score3"></label>
+
+              <input type="radio" name="star" id="score2" value="2" <%=
+              items[0].recipe_rating == 2 ? 'checked' : '' %>/>
+              <label class="star" for="score2"></label>
+
+              <input type="radio" name="star" id="score1" value="1" <%=
+              items[0].recipe_rating == 1 ? 'checked' : '' %>/>
+              <label class="star" for="score1"></label>
+            </div>
+            <span>(<%= items[0].click %>)</span>
+          </div>
+        </div>
+        <div class="tag">
+          <span><%= items[0].style_name %></span>
+          <span>
+            <% if (items[0].when == 1) { %> 早餐 <% } else if (items[0].when ==
+            2) { %> 午餐 <% } else if (items[0].when == 3) { %> 晚餐 <% } %>
+          </span>
+          <span><%= items[0].is_vege == 1 ? '素食' : '葷食' %></span>
+
+          <input type="checkbox" id="like" />
+          <label for="like" class="label_like">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              class="bi bi-heart"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"
+              />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-heart-fill"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"
+              />
+            </svg>
+          </label>
+        </div>
+      </div>
+
+      <div class="info_time">
+        <div class="size">份量 <%= items[0].recipe_size %> 人</div>
+        <div class="time">備料時間 <%= items[0].preparation_time %> 分鐘</div>
+        <div class="time">烹飪時間 <%= items[0].cook_time %> 分鐘</div>
+        <div class="time">
+          總時間 <%= Number(items[0].preparation_time) +
+          Number(items[0].cook_time) %> 分鐘
+        </div>
+      </div>
+
+      <div class="info_describe"><%= items[0].full_describe %></div>
+    </div>
+
+    <div id="recipe_ingredient">
+      <div class="ingredients">
+        <div class="title">
+          食材和配料
+          <div class="title_small">(紅色自由添加)</div>
+        </div>
+        <% items.forEach(function(item) { %> <%
+        if(item.ingredient_name.startsWith('@')) { %>
+        <span class="side_dishes"
+          >- <%= item.ingredient_name.replace('@', '') %> : <%=
+          item.ingredient_quantity %></span
+        >
+        <% } else { %>
+        <span
+          >- <%= item.ingredient_name %> : <%= item.ingredient_quantity %></span
+        >
+        <% } %> <% }); %>
+      </div>
+      <div class="prodcut">
+        <div class="title">您可能需要</div>
+        <a href="/product_section/product_page/<%= items[0].recipe_uid %>"
+          ><img src="../../img/product/product<%= items[0].recipe_uid %>.jpg"
+        /></a>
+      </div>
+    </div>
+
+    <div id="step">
+      <div class="step_line">步驟</div>
+      <% var steps = items[0].step.split("@"); for(let i = 0; i < steps.length;
+      i++) { %>
+      <div class="step_text">
+        <div class="num"><%= i + 1 %>.</div>
+        <div class="text"><%= steps[i] %></div>
+      </div>
+      <% } %>
+    </div>
+
+    <div id="recommend_section">
+      <div class="title">你可能會喜歡</div>
+      <div class="recipe_cards">
+        <% recommendations.forEach(function(recipe) { %>
+        <div class="card">
+          <a href="/recipe_section/recipe_page/<%= recipe.recipe_uid %>"
+            ><img src="../../img/recipe/recipe<%= recipe.recipe_uid %>.jpg"
+          /></a>
+          <a
+            class="card_text"
+            href="/recipe_section/recipe_page/<%= recipe.recipe_uid %>"
+            ><%= recipe.recipe_title %></a
+          >
+          <div class="rating">
+            <% for(let i = 1; i <= 5; i++) { %> <% if(i <= recipe.recipe_rating)
+            { %>
+            <span>★</span>
+            <% } else { %>
+            <span>☆</span>
+            <% } %> <% } %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+    <%- include('footer') %>
+  </body>
+</html>

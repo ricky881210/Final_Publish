@@ -1,0 +1,975 @@
+@charset "UTF-8";
+body {
+  box-sizing: border-box;
+  border: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-button {
+  display: none;
+}
+body::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--main_orange);
+  border-radius: 4px;
+  border: none;
+}
+body::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
+:root {
+  --main_orange: rgb(243, 121, 36);
+  --text_withe: rgb(255, 255, 255);
+  --text_black: rgb(53, 53, 53);
+  --border_gray: rgb(128, 128, 128);
+  --bg_opacity_black: rgba(0, 0, 0, 0.5);
+}
+
+a {
+  text-decoration: none;
+}
+
+#comment_btn {
+  margin: 0 5px;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 600;
+  font-size: 14px;
+  justify-content: center;
+  line-height: 25px;
+  max-width: 480px;
+  min-width: 40px;
+  overflow: hidden;
+  padding: 0 5px;
+  text-align: center;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+}
+#comment_btn:hover, #comment_btn:focus-visible, #comment_btn:active {
+  background-color: wheat;
+}
+#comment_btn:disabled {
+  cursor: default;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+#product {
+  width: 100%;
+  margin-top: 100px;
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+}
+#product .product_img,
+#product .product_info {
+  width: 500px;
+  height: 500px;
+}
+#product .product_img img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+#product .product_info .product_title {
+  font-weight: 900;
+  font-size: 40px;
+}
+#product .product_info .title {
+  font-weight: 900;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+#product .product_info #star_container span {
+  font-weight: 600;
+}
+#product .product_info #star_container .star {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  color: var(--main_orange);
+}
+#product .product_info #star_container .star > label {
+  font-size: 40px;
+}
+#product .product_info #star_container .star > label::after {
+  content: "☆";
+}
+#product .product_info #star_container .star > label:hover {
+  cursor: pointer;
+}
+#product .product_info #star_container .star > label:hover::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#product .product_info #star_container .star > label:hover ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#product .product_info #star_container .star > input {
+  display: none;
+}
+#product .product_info #star_container .star > input:checked + label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#product .product_info #star_container .star > input:checked ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+#product .product_info .product_price {
+  font-weight: 900;
+  font-size: 35px;
+}
+#product .product_info .product_tag {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin-top: 10px;
+}
+#product .product_info .product_tag span {
+  border: 1px solid var(--main_orange);
+  color: var(--main_orange);
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 25px;
+  margin-right: 10px;
+}
+#product .product_info .product_size {
+  margin-top: 10px;
+}
+#product .product_info .product_size .size_info {
+  font-weight: 600;
+}
+#product .product_info .product_describe p {
+  font-weight: 900;
+}
+#product .product_info .btn {
+  width: 50%;
+  height: 48px;
+}
+#product .product_info .btn .btn_border {
+  display: flex;
+  border: 2px solid var(--text_black);
+  height: 100%;
+}
+#product .product_info .btn .btn_border .btn_btn {
+  display: flex;
+  border-right: 2px solid var(--text_black);
+}
+#product .product_info .btn .btn_border .btn_btn .product_quanity {
+  display: flex;
+  align-items: center;
+  width: 20px;
+  font-weight: 900;
+  font-size: 20px;
+  margin: 0 10px;
+}
+#product .product_info .btn .btn_border .btn_btn button {
+  height: 100%;
+  width: 20px;
+  font-weight: 900;
+  font-size: 20px;
+  background-color: var(--text_withe);
+  border: none;
+  padding-left: 3px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+#product .product_info .btn .btn_border .btn_btn button:hover {
+  background: var(--main_orange);
+  color: var(--text_withe);
+}
+#product .product_info .btn .btn_text {
+  width: 100%;
+  font-weight: 900;
+  font-size: 25px;
+  background-color: var(--text_withe);
+  border: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+#product .product_info .btn .btn_text:hover {
+  background: var(--main_orange);
+  color: var(--text_withe);
+}
+
+#recommend_section {
+  margin: 50px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recommend_section .title {
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+#recommend_section .recipe_cards {
+  width: 95%;
+  display: flex;
+  justify-content: space-around;
+}
+#recommend_section .recipe_cards .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#recommend_section .recipe_cards .card img {
+  width: 200px;
+  height: 200px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  margin-bottom: 10px;
+}
+#recommend_section .recipe_cards .card .card_text {
+  font-weight: 600;
+  font-size: 18px;
+}
+#recommend_section .recipe_cards .card .card_text:hover {
+  color: var(--main_orange);
+}
+#recommend_section .recipe_cards .card div {
+  color: var(--main_orange);
+}
+
+#user_comment {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+  position: relative;
+}
+#user_comment .title {
+  font-weight: 900;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+#user_comment .comment_carousel {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+#user_comment .comment_carousel .comment_wrapper {
+  width: 300%;
+  display: flex;
+  margin: auto;
+  transition: transform 0.5s ease-in-out;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info {
+  min-width: 30%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 10px 10px 5px rgba(243, 121, 36, 0.7);
+  border-radius: 25px;
+  margin: 10px 80px;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .user_name {
+  font-weight: 600;
+  font-size: 24px;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .user_rating {
+  color: var(--main_orange);
+  margin-bottom: 5px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text {
+  padding: 10px 150px 40px 150px;
+  font-weight: 600;
+  font-size: 18px;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text::-webkit-scrollbar {
+  width: 5px;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text::-webkit-scrollbar-button {
+  display: none;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text::-webkit-scrollbar-thumb {
+  background-color: var(--main_orange);
+  border-radius: 4px;
+  border: none;
+}
+#user_comment .comment_carousel .comment_wrapper .comment_info .comment_text::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+#user_comment .carousel_btn .carousel_pre,
+#user_comment .carousel_btn .carousel_next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--main_orange);
+  cursor: pointer;
+}
+#user_comment .carousel_btn .carousel_pre {
+  left: 0;
+}
+#user_comment .carousel_btn .carousel_next {
+  right: 0;
+}
+
+.more_commet {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin: 30px auto;
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.more_commet::-webkit-scrollbar {
+  width: 6px;
+}
+.more_commet::-webkit-scrollbar-button {
+  display: none;
+}
+.more_commet::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+.more_commet::-webkit-scrollbar-thumb {
+  background-color: var(--main_orange);
+  border-radius: 4px;
+  border: none;
+}
+.more_commet::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+.more_commet .no_comments {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 20px;
+}
+.more_commet .all_comment_card {
+  width: 99%;
+  margin: 15px 0;
+  margin-right: 20px;
+  position: relative;
+}
+.more_commet .all_comment_card:last-child {
+  margin-bottom: 0;
+}
+.more_commet .all_comment_card::after {
+  content: "";
+  background-color: var(--main_orange);
+  width: 100%;
+  height: 2px;
+  bottom: -5px;
+  position: absolute;
+}
+.more_commet .all_comment_card .comment_name {
+  color: var(--main_orange);
+  font-weight: 600;
+  font-size: 20px;
+  margin-right: 10px;
+}
+.more_commet .all_comment_card .comment_time {
+  font-weight: 600;
+  font-size: 14px;
+}
+.more_commet .all_comment_card .comment_rating {
+  color: var(--main_orange);
+  margin-left: 20px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.more_commet .all_comment_card .user_comment {
+  margin: 10px 0 0 10px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.me_comment {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 20px auto;
+}
+.me_comment .comment_star {
+  align-self: start;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  color: var(--main_orange);
+}
+.me_comment .comment_star > label {
+  font-size: 30px;
+}
+.me_comment .comment_star > label::after {
+  content: "☆";
+}
+.me_comment .comment_star > label:hover {
+  cursor: pointer;
+}
+.me_comment .comment_star > label:hover::after {
+  content: "★";
+  color: var(--main_orange);
+}
+.me_comment .comment_star > label:hover ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+.me_comment .comment_star > input {
+  display: none;
+}
+.me_comment .comment_star > input:checked + label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+.me_comment .comment_star > input:checked ~ label::after {
+  content: "★";
+  color: var(--main_orange);
+}
+.me_comment #user_text {
+  width: 100%;
+  height: 100px;
+  resize: none;
+  border: 1px solid var(--border_gray);
+}
+.me_comment button {
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
+@media screen and (max-width: 1300px) {
+  #product {
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+  }
+  #product .product_img,
+  #product .product_info {
+    width: 450px;
+    height: 450px;
+  }
+  #product .product_img img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #product .product_info .product_title {
+    font-weight: 900;
+    font-size: 30px;
+  }
+  #product .product_info .title {
+    font-weight: 900;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  #product .product_info #star_container span {
+    font-weight: 600;
+  }
+  #product .product_info #star_container .star {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > label {
+    font-size: 30px;
+  }
+  #product .product_info #star_container .star > label::after {
+    content: "☆";
+  }
+  #product .product_info #star_container .star > label:hover {
+    cursor: pointer;
+  }
+  #product .product_info #star_container .star > label:hover::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > label:hover ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > input {
+    display: none;
+  }
+  #product .product_info #star_container .star > input:checked + label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > input:checked ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info .product_price {
+    font-weight: 900;
+    font-size: 25px;
+  }
+  #product .product_info .product_tag {
+    margin-top: 10px;
+  }
+  #product .product_info .product_tag span {
+    border: 1px solid var(--main_orange);
+    color: var(--main_orange);
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 25px;
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  #product .product_info .product_size {
+    margin-top: 10px;
+  }
+  #product .product_info .product_size .size_info {
+    font-weight: 600;
+  }
+  #product .product_info .product_describe p {
+    font-weight: 900;
+    font-size: 14px;
+  }
+  #product .product_info .btn {
+    width: 50%;
+    height: 48px;
+  }
+  #product .product_info .btn .btn_border {
+    display: flex;
+    border: 2px solid var(--text_black);
+    height: 100%;
+  }
+  #product .product_info .btn .btn_border .btn_btn {
+    display: flex;
+    border-right: 2px solid var(--text_black);
+  }
+  #product .product_info .btn .btn_border .btn_btn .product_quanity {
+    display: flex;
+    align-items: center;
+    width: 20px;
+    font-weight: 900;
+    font-size: 20px;
+    margin: 0 10px;
+  }
+  #product .product_info .btn .btn_border .btn_btn button {
+    height: 100%;
+    width: 20px;
+    font-weight: 900;
+    font-size: 20px;
+    background-color: var(--text_withe);
+    border: none;
+    padding-left: 3px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    cursor: pointer;
+  }
+  #product .product_info .btn .btn_border .btn_btn button:hover {
+    background: var(--main_orange);
+    color: var(--text_withe);
+  }
+  #product .product_info .btn .btn_text {
+    width: 100%;
+    font-weight: 900;
+    font-size: 18px;
+    background-color: var(--text_withe);
+    border: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    cursor: pointer;
+  }
+  #product .product_info .btn .btn_text:hover {
+    background: var(--main_orange);
+    color: var(--text_withe);
+  }
+  #recommend_section {
+    margin: 50px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .title {
+    font-weight: 900;
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  #recommend_section .recipe_cards {
+    width: 95%;
+    display: flex;
+    justify-content: space-around;
+  }
+  #recommend_section .recipe_cards .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .recipe_cards .card img {
+    width: 150px;
+    height: 150px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    margin-bottom: 10px;
+  }
+  #recommend_section .recipe_cards .card .card_text {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #recommend_section .recipe_cards .card .card_text:hover {
+    color: var(--main_orange);
+  }
+  #recommend_section .recipe_cards .card div {
+    color: var(--main_orange);
+  }
+  #user_comment {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+  }
+  #user_comment .title {
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  #user_comment .comment_carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  #user_comment .comment_carousel .comment_wrapper {
+    width: 80%;
+    display: flex;
+    margin: auto;
+    transition: transform 0.5s ease-in-out;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info {
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 10px 10px 5px rgba(243, 121, 36, 0.7);
+    border-radius: 25px;
+    margin: 10px 50px 10px 0;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .user_name {
+    font-weight: 600;
+    font-size: 24px;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .user_rating {
+    color: var(--main_orange);
+    margin-bottom: 5px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .comment_text {
+    padding: 10px 100px 30px 100px;
+    font-weight: 600;
+    font-size: 18px;
+    max-height: 150px;
+    overflow: auto;
+  }
+  #user_comment .carousel_btn .carousel_pre,
+  #user_comment .carousel_btn .carousel_next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--main_orange);
+    cursor: pointer;
+  }
+  #user_comment .carousel_btn .carousel_pre {
+    left: 0;
+  }
+  #user_comment .carousel_btn .carousel_next {
+    right: 0;
+  }
+}
+@media screen and (max-width: 900px) {
+  #product {
+    width: 100%;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  #product .product_img,
+  #product .product_info {
+    width: 450px;
+    height: 450px;
+  }
+  #product .product_img img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+  }
+  #product .product_info .product_title {
+    font-weight: 900;
+    font-size: 30px;
+  }
+  #product .product_info .title {
+    font-weight: 900;
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  #product .product_info #star_container span {
+    font-weight: 600;
+  }
+  #product .product_info #star_container .star {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > label {
+    font-size: 30px;
+  }
+  #product .product_info #star_container .star > label::after {
+    content: "☆";
+  }
+  #product .product_info #star_container .star > label:hover {
+    cursor: pointer;
+  }
+  #product .product_info #star_container .star > label:hover::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > label:hover ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > input {
+    display: none;
+  }
+  #product .product_info #star_container .star > input:checked + label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info #star_container .star > input:checked ~ label::after {
+    content: "★";
+    color: var(--main_orange);
+  }
+  #product .product_info .product_price {
+    font-weight: 900;
+    font-size: 25px;
+  }
+  #product .product_info .product_tag {
+    margin-top: 10px;
+  }
+  #product .product_info .product_tag span {
+    border: 1px solid var(--main_orange);
+    color: var(--main_orange);
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 25px;
+    margin-right: 10px;
+    font-size: 14px;
+  }
+  #product .product_info .product_size {
+    margin-top: 10px;
+  }
+  #product .product_info .product_size .size_info {
+    font-weight: 600;
+  }
+  #product .product_info .product_describe p {
+    font-weight: 900;
+    font-size: 14px;
+  }
+  #product .product_info .btn {
+    width: 50%;
+    height: 48px;
+  }
+  #product .product_info .btn .btn_border {
+    display: flex;
+    border: 2px solid var(--text_black);
+    height: 100%;
+  }
+  #product .product_info .btn .btn_border .btn_btn {
+    display: flex;
+    border-right: 2px solid var(--text_black);
+  }
+  #product .product_info .btn .btn_border .btn_btn .product_quanity {
+    display: flex;
+    align-items: center;
+    width: 20px;
+    font-weight: 900;
+    font-size: 20px;
+    margin: 0 10px;
+  }
+  #product .product_info .btn .btn_border .btn_btn button {
+    height: 100%;
+    width: 20px;
+    font-weight: 900;
+    font-size: 20px;
+    background-color: var(--text_withe);
+    border: none;
+    padding-left: 3px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    cursor: pointer;
+  }
+  #product .product_info .btn .btn_border .btn_btn button:hover {
+    background: var(--main_orange);
+    color: var(--text_withe);
+  }
+  #product .product_info .btn .btn_text {
+    width: 100%;
+    font-weight: 900;
+    font-size: 18px;
+    background-color: var(--text_withe);
+    border: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    cursor: pointer;
+  }
+  #product .product_info .btn .btn_text:hover {
+    background: var(--main_orange);
+    color: var(--text_withe);
+  }
+  #recommend_section {
+    margin: 50px 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .title {
+    font-weight: 900;
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  #recommend_section .recipe_cards {
+    width: 95%;
+    display: flex;
+    justify-content: space-around;
+  }
+  #recommend_section .recipe_cards .card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #recommend_section .recipe_cards .card:nth-child(-n+2) {
+    display: none;
+  }
+  #recommend_section .recipe_cards .card img {
+    width: 125px;
+    height: 125px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    margin-bottom: 10px;
+  }
+  #recommend_section .recipe_cards .card .card_text {
+    font-weight: 600;
+    font-size: 18px;
+  }
+  #recommend_section .recipe_cards .card .card_text:hover {
+    color: var(--main_orange);
+  }
+  #recommend_section .recipe_cards .card div {
+    color: var(--main_orange);
+  }
+  #user_comment {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+  }
+  #user_comment .title {
+    font-weight: 900;
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  #user_comment .comment_carousel {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  #user_comment .comment_carousel .comment_wrapper {
+    width: 80%;
+    display: flex;
+    margin: auto;
+    transition: transform 0.5s ease-in-out;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info {
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 10px 10px 5px rgba(243, 121, 36, 0.7);
+    border-radius: 25px;
+    margin: 10px 50px 10px 0;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .user_name {
+    font-weight: 600;
+    font-size: 24px;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .user_rating {
+    color: var(--main_orange);
+    margin-bottom: 5px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  #user_comment .comment_carousel .comment_wrapper .comment_info .comment_text {
+    padding: 10px 30px 30px 30px;
+    font-weight: 600;
+    font-size: 18px;
+    max-height: 150px;
+    overflow: auto;
+  }
+  #user_comment .carousel_btn .carousel_pre,
+  #user_comment .carousel_btn .carousel_next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--main_orange);
+    cursor: pointer;
+  }
+  #user_comment .carousel_btn .carousel_pre {
+    left: 0;
+  }
+  #user_comment .carousel_btn .carousel_next {
+    right: 0;
+  }
+}/*# sourceMappingURL=product_page.css.map */

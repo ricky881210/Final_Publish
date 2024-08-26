@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>編輯項目<%= items.recipe_uid %> | <%= items.recipe_title %></title>
+  </head>
+  <link rel="stylesheet" href="/backstage.css" />
+  <link rel="stylesheet" href="/add_item.css" />
+  <link rel="icon" href="../../img/common/favicon.ico" />
+  <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      // 更新剩餘字數的函數
+      function updateCount() {
+        const inputLength = $(this).val().length;
+        const maxLength = $(this).attr("maxlength");
+        const remaining = maxLength - inputLength;
+        let counter = $(this).next(".counter");
+        if (counter.length === 0) {
+          counter = $('<span class="counter"></span>');
+          $(this).parent().append(counter);
+        }
+        counter.text(`剩餘字數：${remaining}`);
+      }
+
+      // 為每個需要限制字數的欄位添加事件監聽器
+      $("#title, #short_describe, #full_describe, #step").on(
+        "input",
+        updateCount
+      );
+      // 頁面加載時更新每個輸入框的剩餘字數
+      $("#title, #short_describe, #full_describe, #step").each(function () {
+        updateCount.call(this);
+      });
+
+      // 增加食材欄位的函數
+      function addIngredientField(containerSelector, fieldClass) {
+        const newField = `
+          <div class="${fieldClass}">
+            <input placeholder="食材名稱" type="text" maxlength="20" />
+            <input placeholder="份量" type="text" maxlength="10" />
+          </div>
+        `;
+        $(containerSelector).append(newField);
+      }
+
+
+// 為刪除按鈕添加點擊事件監聽器
+ $(".necessary_ingredients").on("click", ".deleteButton", function() {
+  $(this).parent().remove();
+});
+
+      // 為 "增加必要食材欄位" 按鈕添加點擊事件監聽器
+      $("#add_field").click(function () {
+        // 建立新的輸入欄位
+        var newIngredientField = $(
+          '<input class="ingredient" placeholder="食材名稱" type="text" maxlength="20" />'
+        );
+        var newQuantityField = $(
+          '<input class="quantity" placeholder="份量" type="text" maxlength="10" />'
+        );
+
+        var deleteButton = $('<button class="deleteButton">X</button>');
+
+        // 建立一個新的 div 元素，並將兩個輸入欄位加入到這個 div 中
+        var newIngredientDiv = $('<div class="ingredientDiv"></div>');
+        newIngredientDiv.append(newIngredientField);
+        newIngredientDiv.append(newQuantityField);
+        newIngredientDiv.append(deleteButton);
+
+        // 將這個 div 加入到 .necessary_ingredients 中
+        $(".necessary_ingredients").append(newIngredientDiv);
+      });
+
+      $("#img_upload").change(function () {
+        if (this.files.length > 0) {
+          $("#is_upload")
+            .text("已選擇")
+            .css("background-color", "rgb(75, 181, 67)");
+        } else {
+          $("#is_upload").text("選擇上傳圖片").css("background-color", "");
+        }
+      });
+
+  
+
+    $('#edit_button').click(function(e) {
+      e.preventDefault();
+
+
+      // 收集表單數據
+      var recipeId = $('#uid').val();
+      var formData = new FormData();
+      formData.append('recipe_title', $('#title').val());
+      formData.append('part_describe', $('#short_describe').val());
+      formData.append('full_describe', $('#full_describe').val());
+      formData.append('step', $('#step').val());
+      formData.append('size', $('#size').val());
+      formData.append('prepare_time', $('#prepare_time').val());
+      formData.append('cooking_time', $('#cooking_time').val());
+      formData.append('is_vage', $('input[name="is_vage"]:checked').val());
+      formData.append('is_kitchen', $('input[name="is_kitchen"]:checked').val());
+      formData.append('when', $('select[name="when"]').val());
+      formData.append('style', $('select[name="style"]').val());
+      formData.append('related', $('select[name="related"]').val());
+      formData.append('recipe_uid', $('#uid').val());
+      formData.append('file', $('#img_upload')[0].files[0]);
+
+      var ingredients = [];
+  $('.ingredientDiv').each(function() {
+    var ingredient = $(this).find('.ingredient').val();
+    var quantity = $(this).find('.quantity').val();
+    ingredients.push({ingredient_name: ingredient, ingredient_quantity: quantity});
+  });
+  formData.append('ingredients', JSON.stringify(ingredients));
+
+      $.ajax({
+    url: '/recipe/edit/' + recipeId, // 你需要替換這裡的recipeId
+    type: 'POST',
+    data: formData,
+    processData: false,  // 告訴jQuery不要處理發送的數據
+    contentType: false,  // 告訴jQuery不要設置Content-Type請求頭
+    success: function(data){
+    alert("食譜更新成功!")
+    console.log('Upload successful!\n' + data);
+  },
+  error: function(jqXHR, textStatus, errorThrown){
+    console.log("AJAX 請求失敗: " + textStatus);
+  }
+});
+  });
+  });
+    
+  </script>
+
+  <body>
+    <%- include('nav_bar') %>
+    <div id="item_uid">
+      <span>項目編號 : <%= items.recipe_uid %> 、 <%= items.recipe_title %> </span>
+      <hr />
+      <input type="text" id="uid" value="<%= items.recipe_uid %>" hidden>
+    </div>
+
+    <div id="item_info">
+      <div class="item_container">
+        <div class="item_left">
+          <div>
+            編輯食譜注意事項
+            <div class="hover">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-question-circle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"
+                />
+                <path
+                  d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286m1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94"
+                />
+              </svg>
+              <div class="hover-content">
+                <p>所有欄位都必須填寫</p>
+                <p>食譜的步驟無須標示第幾步，只須按照順序輸入</p>
+                <p>食譜的每個步驟請使用"@"隔開</p>
+                <p>份量/備料時間/烹飪時間不得為零或負數</p>
+                <p>食譜必要的食材正常填寫，可取捨的配料/調味請在前面加上"@"</p>
+                <p>食材的份量請盡量使用阿拉伯數字搭配中文</p>
+                <p>相同的食材/配料不得重複填寫</p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="title">食譜名稱 :</label
+            ><input
+              id="title"
+              type="text"
+              maxlength="20"
+              value="<%= items.recipe_title %>"
+            />
+          </div>
+          <div>
+            <label for="short_describe">短描述 : </label
+            ><textarea id="short_describe" type="text" maxlength="100">
+<%= items.part_describe %></textarea
+            >
+          </div>
+          <div>
+            <label for="full_describe">完整描述 : </label
+            ><textarea id="full_describe" type="text" maxlength="300">
+<%= items.full_describe %></textarea
+            >
+          </div>
+          <div>
+            <label for="step">食譜步驟 : </label
+            ><textarea id="step" type="step" maxlength="1200">
+<%= items.step %></textarea
+            >
+          </div>
+        </div>
+
+        <div class="item_mid">
+          <div>
+            <div class="container">
+              <img src="/../img/recipe/recipe<%= items.recipe_uid %>.jpg" />
+            </div>
+            <label for="img_upload">
+              <div class="btn" id="is_upload">選擇上傳圖片</div>
+            </label>
+            <input type="file" id="img_upload" accept=".png, .jpg" />
+          </div>
+          <div>
+            <label for="size">幾人份 : </label
+            ><input
+              id="size"
+              type="number"
+              min="1"
+              value="<%= items.recipe_size %>"
+            />
+          </div>
+          <div>
+            <label for="prepare_time">備料時間 : </label
+            ><input
+              id="prepare_time"
+              type="number"
+              min="1"
+              value="<%= items.preparation_time %>"
+            />
+          </div>
+          <div>
+            <label for="cooking_time">烹飪時間 : </label
+            ><input
+              id="cooking_time"
+              type="number"
+              min="1"
+              value="<%= items.cook_time %>"
+            />
+          </div>
+
+          <div class="input_no_colum">
+            <label>素食 : </label>
+            <label
+              >是<input name="is_vage" type="radio" value=1 <%= items.is_vege
+              == 1 ? 'checked' : '' %> /></label
+            >
+            <label
+              >否<input name="is_vage" type="radio" value=0 <%= items.is_vege
+              == 0 ? 'checked' : '' %> /></label
+            >
+          </div>
+          <div class="input_no_colum">
+            <label>環境要求 : </label>
+            <label
+              >廚房<input name="is_kitchen" type="radio" value=1 <%=
+              items.isKitchen == 1 ? 'checked' : '' %> /></label
+            >
+            <label
+              >無<input name="is_kitchen" type="radio" value=0 <%=
+              items.isKitchen == 0 ? 'checked' : '' %> /></label
+            >
+          </div>
+          <div>
+            <label>時段分類 : </label>
+            <select name="when">
+              <option value=1 <%= items.when == 1 ? 'selected' : '' %>>早餐</option>
+              <option value=2 <%= items.when == 2 ? 'selected' : '' %>>午餐</option>
+              <option value=3 <%= items.when == 3 ? 'selected' : '' %>>晚餐</option>
+            </select>
+          </div>
+          <div>
+            <label>料理風格 : </label>
+            <select name="style">
+              <option <%= items.style == 1 ? 'selected' : '' %> value=1>日式</option>
+              <option <%= items.style == 2 ? 'selected' : '' %> value=2>義式</option>
+              <option <%= items.style == 3 ? 'selected' : '' %> value=3>法式</option>
+              <option <%= items.style == 4 ? 'selected' : '' %> value=4>韓式</option>
+              <option <%= items.style == 5 ? 'selected' : '' %> value=5>泰式</option>
+            </select>
+          </div>
+          <div>
+            <label>商品關聯 : </label>
+            <select name="related">
+              <option <%= items.related == 1 ? 'selected' : '' %> value=1>食材</option>
+              <option <%= items.related == 2 ? 'selected' : '' %> value=2>調味料</option>
+              <option <%= items.related == 3 ? 'selected' : '' %> value=3>調理包</option>
+              <option <%= items.related == 4 ? 'selected' : '' %> value=4>碗具</option>
+              <option <%= items.related == 5 ? 'selected' : '' %> value=5>鍋具</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="item_right">
+          <div class="item_right_sction necessary">
+            <div>
+              <button id="add_field">增加食材欄位</button>
+            </div>
+            <div class="necessary_ingredients">
+              <% ingredients.forEach(function(ingredient) { %>
+              <div class="ingredientDiv"><input
+                  class="ingredient"
+                  placeholder="食材名稱"
+                  type="text"
+                  maxlength="20"
+                  value="<%= ingredient.ingredient_name %>"
+                /><input
+                  class="quantity"
+                  placeholder="份量"
+                  type="text"
+                  maxlength="10"
+                  value="<%= ingredient.ingredient_quantity %>"
+                /><button class="deleteButton">X</button>
+              </div>
+
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="submmit">
+        <button id="edit_button">更改食譜</button>
+      </div>
+    </div>
+    <%- include('footer') %>
+  </body>
+</html>

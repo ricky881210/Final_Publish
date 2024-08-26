@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>異食鍋|食譜區</title>
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <link rel="stylesheet" href="/recipe_section.css" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      const searchFromNav = sessionStorage.getItem("searchFromNav");
+      if (searchFromNav) {
+        $("#want").val(searchFromNav);
+        sessionStorage.removeItem("searchFromNav");
+      }
+
+      function filterRecipes() {
+        // 選擇被勾選的標籤
+        function checkedValues(className) {
+          return $(`.${className}:checked`)
+            .map(function () {
+              return $(this).next("label").text().trim();
+            })
+            .get();
+        }
+        let isKitchen = checkedValues("isKitchen");
+        let when = checkedValues("when");
+        let style = checkedValues("style");
+        let vege = checkedValues("vege");
+        let hasResult = true;
+        // /選擇被勾選的標籤
+
+        // 於篩選結果排序使用
+        let visibleCount = 0;
+
+        $(".recipe_card").each(function () {
+          // 搜尋功能
+          let wantInput = $("#want").val().trim().toLowerCase();
+          let notWantInput = $("#notWant").val().trim().toLowerCase();
+          let cardName = $(this)
+            .find(".recipe_title")
+            .text()
+            .trim()
+            .toLowerCase();
+          let cardIngredients = $(this).attr("data-ingredients").split(",");
+          // console.log(cardIngredients);
+
+          // for...of遍歷該食譜的所有食材，判斷出確實不想要的食材回傳true
+          function notWantedIngredient(ingredients, unwanted) {
+            for (let ingredient of ingredients) {
+              ingredient = ingredient.trim();
+              if (
+                !ingredient.startsWith("@") &&
+                ingredient.includes(unwanted)
+              ) {
+                return true;
+              }
+            }
+            return false;
+          }
+
+          // 判斷式使用其相反值
+          let matchesSearch =
+            (wantInput === "" ||
+              cardName.includes(wantInput) ||
+              cardIngredients.includes(wantInput) ||
+              cardIngredients.includes("@" + wantInput)) &&
+            (notWantInput === "" ||
+              (!cardName.includes(notWantInput) &&
+                !notWantedIngredient(cardIngredients, notWantInput)));
+          // /搜尋功能
+
+          // 轉換資料表示型式
+          let cardClass = [
+            $(this).attr("data-isKitchen") == 1 ? "廚房" : "套房",
+            $(this).attr("data-when"),
+            $(this).attr("data-style"),
+            $(this).attr("data-vege") == 1 ? "素食" : "",
+          ];
+          // /轉換資料表示型式
+
+          // 標籤篩選
+          function arraysOverlap(arr1, arr2) {
+            return (
+              arr2.length === 0 ||
+              arr2.some((element) => arr1.includes(element))
+            );
+          }
+
+          let matchesFilters =
+            arraysOverlap(cardClass, isKitchen) &&
+            arraysOverlap(cardClass, when) &&
+            arraysOverlap(cardClass, style) &&
+            arraysOverlap(cardClass, vege);
+          // /標籤篩選
+
+          if (matchesSearch && matchesFilters) {
+            $(this).css({
+              display: "block",
+              "grid-column":
+                visibleCount % 6 === 0 || visibleCount % 6 === 4
+                  ? "span 2"
+                  : "auto",
+              "grid-row":
+                visibleCount % 6 === 0 || visibleCount % 6 === 4
+                  ? "span 2"
+                  : "auto",
+              height:
+                visibleCount % 6 === 0 || visibleCount % 6 === 4
+                  ? "520px"
+                  : "250px",
+            });
+            visibleCount++;
+          } else {
+            $(this).css("display", "none");
+          }
+        });
+      }
+
+      filterRecipes();
+
+      $("#search_btn").on("click", filterRecipes);
+      $('.filter_btn input[type="checkbox"]').on("change", filterRecipes);
+
+      $("#search_btn").click(function () {
+        $("html, body").animate(
+          {
+            scrollTop: $("#move_to_here").offset().top,
+          },
+          "slow"
+        );
+      });
+
+      function updateNavBarCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.length;
+        if (cartCount === 0) {
+          $("#brackets").hide();
+        } else {
+          $("#nav_cart_count").text(cartCount);
+          $("#brackets").show();
+        }
+      }
+
+      // 初始化 nav_bar 購物車數量
+      updateNavBarCartCount();
+    });
+  </script>
+
+  <body>
+    <%- include('nav_bar') %>
+
+    <div id="head_section">
+      <img src="../../img/recipe_section/Muffin_Egg_Meal.jpeg" />
+      <div class="search_recipe">
+        <div class="search_recipe_text">
+          <h1>探索新食譜</h1>
+          <span>想找的食譜，應該都找得到</span>
+        </div>
+        <div class="search_recipe_search">
+          <input
+            id="want"
+            type="text"
+            class="search_recipe_input"
+            placeholder="我想吃..."
+          /><br /><br />
+          <input
+            id="notWant"
+            type="text"
+            class="search_recipe_input"
+            placeholder="我不想吃..."
+          />
+        </div>
+        <button id="search_btn">搜索</button>
+      </div>
+    </div>
+
+    <div id="multiplex_filter">
+      <div class="filter">
+        <div class="filter_title">
+          <span>烹飪空間</span>
+        </div>
+        <div class="filter_btn">
+          <input class="isKitchen" type="checkbox" id="suite" /><label
+            class="btn"
+            for="suite"
+            >套房</label
+          >
+          <input class="isKitchen" type="checkbox" id="kitchen" /><label
+            class="btn"
+            for="kitchen"
+            >廚房</label
+          >
+        </div>
+      </div>
+      <div class="filter">
+        <div class="filter_title">
+          <span>烹飪時段</span>
+        </div>
+        <div class="filter_btn">
+          <input class="when" type="checkbox" id="breakfast" /><label
+            class="btn"
+            for="breakfast"
+            >早餐</label
+          >
+          <input class="when" type="checkbox" id="lunch" /><label
+            class="btn"
+            for="lunch"
+            >中餐</label
+          >
+          <input class="when" type="checkbox" id="dinner" /><label
+            class="btn"
+            for="dinner"
+            >晚餐</label
+          >
+        </div>
+      </div>
+      <div class="filter">
+        <div class="filter_title">
+          <span>料理風格</span>
+        </div>
+        <div class="filter_btn">
+          <input class="style" type="checkbox" id="italian" /><label
+            class="btn"
+            for="italian"
+            >義式</label
+          >
+          <input class="style" type="checkbox" id="french" /><label
+            class="btn"
+            for="french"
+            >法式</label
+          >
+          <input class="style" type="checkbox" id="korean" /><label
+            class="btn"
+            for="korean"
+            >韓式</label
+          >
+          <input class="style" type="checkbox" id="thai" /><label
+            class="btn"
+            for="thai"
+            >泰式</label
+          >
+          <input class="style" type="checkbox" id="japanese" /><label
+            class="btn"
+            for="japanese"
+            >日式</label
+          >
+        </div>
+      </div>
+      <div class="filter">
+        <div class="filter_title">
+          <span>特殊需求</span>
+        </div>
+        <div class="filter_btn">
+          <input class="vege" type="checkbox" id="vege" /><label
+            class="btn"
+            for="vege"
+            >素食</label
+          >
+        </div>
+      </div>
+    </div>
+
+    <a id="move_to_here"></a>
+    <div id="recipe_pic_section">
+      <% items.forEach(function(recipe) { %>
+      <div
+        class="recipe_card"
+        data-ingredients="<%= recipe.ingredients %>"
+        data-isKitchen="<%= recipe.isKitchen %>"
+        data-when="<%= recipe.time_name %>"
+        data-style="<%= recipe.style_name %>"
+        data-vege="<%= recipe.is_vege %>"
+      >
+        <a
+          target="_blank"
+          href="/recipe_section/recipe_page/<%= recipe.recipe_uid %>"
+        >
+          <img src="../../img/recipe/recipe<%= recipe.recipe_uid %>.jpg" />
+        </a>
+        <div class="recipe_when"><%= recipe.time_name %></div>
+        <div class="recipe_title"><%= recipe.recipe_title %></div>
+        <a
+          target="_blank"
+          href="/recipe_section/recipe_page/<%= recipe.recipe_uid %>"
+          class="recipe_describe"
+        >
+          <%= recipe.full_describe %>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+    <div id="no_results" style="display: none">
+      找不到符合條件的食譜，試試別種關鍵字吧!
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

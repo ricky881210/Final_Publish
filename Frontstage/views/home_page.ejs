@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SpiceSphere異鍋豐</title>
+    <link rel="stylesheet" href="/HP.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      function updateNavBarCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.length;
+        if (cartCount === 0) {
+          $("#brackets").hide();
+        } else {
+          $("#nav_cart_count").text(cartCount);
+          $("#brackets").show();
+        }
+      }
+
+      // 初始化 nav_bar 購物車數量
+      updateNavBarCartCount();
+      const $imgs = $("#imgs");
+      const $leftBtn = $("#left");
+      const $rightBtn = $("#right");
+      const $img = $("#imgs .big_slide");
+
+      let idx = 0;
+      let interval = setInterval(run, 10000); // 自動倒數變成10秒一張
+
+      function run() {
+        idx++;
+        changeImage();
+      }
+
+      function changeImage() {
+        if (idx > $img.length - 1) {
+          idx = 0;
+        } else if (idx < 0) {
+          idx = $img.length - 1;
+        }
+
+        $imgs.css("transform", `translateX(${-idx * 100}%)`);
+      }
+
+      function resetInterval() {
+        clearInterval(interval);
+        interval = setInterval(run, 10000); // 自動倒數變成10秒一張
+      }
+
+      $rightBtn.on("click", function () {
+        idx++;
+        changeImage();
+        resetInterval();
+      });
+
+      $leftBtn.on("click", function () {
+        idx--;
+        changeImage();
+        resetInterval();
+      });
+
+      // 當滑鼠進入時停止自動播放
+      $imgs.on("mouseenter", function () {
+        clearInterval(interval);
+      });
+
+      // 當滑鼠移開後繼續倒數
+      $imgs.on("mouseleave", function () {
+        resetInterval();
+      });
+
+      const $slids = $("#slids");
+      const $recipe_left_btn = $("#recipe_left_btn");
+      const $recipe_right_btn = $("#recipe_right_btn");
+      const $slide = $("#slids .slide");
+
+      let slide_order = 0;
+      let recipe_interval = setInterval(run, 10000); // 自動倒數變成10秒一張
+
+      function run() {
+        slide_order++;
+        changeSlide();
+      }
+
+      function changeSlide() {
+        if (slide_order > $slide.length - 1) {
+          slide_order = 0;
+        } else if (slide_order < 0) {
+          slide_order = $slide.length - 1;
+        }
+
+        $slids.css(
+          "transform",
+          `translateX(${(-slide_order * 100) / $slide.length}%)`
+        );
+      }
+
+      function resetInterval() {
+        clearInterval(recipe_interval);
+        recipe_interval = setInterval(run, 10000); // 自動倒數變成10秒一張
+      }
+
+      $recipe_right_btn.on("click", function () {
+        slide_order++;
+        changeSlide();
+        resetInterval();
+      });
+
+      $recipe_left_btn.on("click", function () {
+        slide_order--;
+        changeSlide();
+        resetInterval();
+      });
+
+      // 當滑鼠進入時停止自動播放
+      $slids.on("mouseenter", function () {
+        clearInterval(recipe_interval);
+      });
+
+      // 當滑鼠移開後繼續倒數
+      $slids.on("mouseleave", function () {
+        resetInterval();
+      });
+    });
+  </script>
+
+  <body>
+    <!-- Section A -->
+    <%- include('nav_bar')%>
+
+    <div class="slide_section">
+      <div class="carousel">
+        <div class="slide_container" id="imgs">
+          <div class="big_slide">
+            <img src="../../img/recipe_section/Fish_with_Tomatoes.jpg" />
+            <div class="slide_text">
+              <h1>今天的你想吃甚麼呢</h1>
+              <p>韓日義法泰，你想找的食譜攻略全都在這裡！</p>
+            </div>
+          </div>
+          <div class="big_slide">
+            <img src="../../img/recipe_section/Honey_on_the_pancakes.jpg" />
+            <div class="slide_text">
+              <h1>
+                Unlock Global Flavors: Special Deals on Cookware & Ingredients!
+              </h1>
+              <p>讓國際美味在家中綻放，享受全館85折優惠！</p>
+            </div>
+          </div>
+          <div class="big_slide">
+            <img src="../../img/recipe_section/pizza.jpg" />
+            <div class="slide_text">
+              <h1>Share Your Culinary Wisdom: Inspire and Be Inspired!</h1>
+              <p>分享你的烹飪心得，啟發他人，也從中獲得靈感！</p>
+            </div>
+          </div>
+        </div>
+        <div class="buttons_container">
+          <button id="left" class="btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="50"
+              fill="currentColor"
+              class="bi bi-caret-left"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"
+              />
+            </svg>
+          </button>
+          <button id="right" class="btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="50"
+              fill="currentColor"
+              class="bi bi-caret-right"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section B -->
+    <div class="sectionB">
+      <div class="bContainer1">
+        <img class="logo" src="../../img/home_page/logo.png" />
+        <div class="logoText">品牌理念</div>
+      </div>
+      <div class="bContainer2">
+        <p>
+          我們致力於為20至40歲的都市人提供便捷的食譜平台，特別是針對住處不方便開火但渴望自製異國料理的上班族。
+          <br />
+          <br />
+          我們的網站讓用戶能快速找到所需食譜，同時提供相關料理食材和廚具，讓烹飪變得輕鬆有趣。成為現代生活中每一位料理愛好者的最佳夥伴，讓他們隨時隨地享受烹飪的樂趣和美味。
+        </p>
+      </div>
+      <div class="link_card">
+        <div>
+          <a href="/recipe_section"
+            ><img src="../../img/home_page/recipe.jpg" />
+            <h4>食譜</h4></a
+          >
+        </div>
+        <div>
+          <a href="/product_section?category=package">
+            <img src="../../img/home_page/meal kit.jpg" />
+            <h4>調理包</h4></a
+          >
+        </div>
+        <div>
+          <a href="/product_section?category=cookware"
+            ><img src="../../img/home_page/product.jpg" />
+            <h4>廚具</h4></a
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- section C  -->
+    <div class="recipe_recommend_section">
+      <div class="recipe_bar">
+        <a href="">
+          <img src="../../img/home_page/foodbar.jpg" />
+          <h1><a href="/recipe_section">更多食譜推薦</a></h1></a
+        >
+      </div>
+      <div class="card_container">
+        <div class="carousel">
+          <div class="slide_container" id="slids">
+            <div class="slide">
+              <div class="card">
+                <a href="/recipe_section/recipe_page/24"
+                  ><img src="../../img/recipe/recipe24.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/24"
+                      >法式鵝油蒜香起司南瓜</a
+                    >
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    極致濃郁的鵝油香氣結合蒜香與起司，讓南瓜的甜美更加突出，每一口都充滿道地法式風情。
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <a href="/recipe_section/recipe_page/23"
+                  ><img src="../../img/recipe/recipe23.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/23">起酥法式鹹派塔</a>
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    酥脆的塔皮包裹著豐富的餡料，鹹香四溢，讓你一口接一口停不下來。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="card">
+                <a href="/recipe_section/recipe_page/1"
+                  ><img src="../../img/recipe/recipe1.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/1">和風健康早餐沙拉</a>
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    在假日有空能自己料理的時候，就會盡量自煮，自己煮可以挑自己愛吃的健康食物，以清爽營養美味為最高指導原則。
+                    這道充滿營養元素的沙拉，做法超級簡單，除了需要把白煮蛋給煮好外，其他的三種食材都是切切切就完成了
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <a href="/recipe_section/recipe_page/2"
+                  ><img src="../../img/recipe/recipe2.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/2">完熟納豆吐司</a>
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    納豆是黃豆發酵食品，富含蛋白質、大豆異黃酮等營養成分，健康滿分，每味滿分。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="slide">
+              <div class="card">
+                <a href="/recipe_section/recipe_page/43"
+                  ><img src="../../img/recipe/recipe43.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/43">泰式鮮蝦沙拉</a>
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    新鮮的鮮蝦搭配清爽的蔬菜，佐以泰式特調醬汁，帶來清新爽口的美味體驗。
+                  </p>
+                </div>
+              </div>
+              <div class="card">
+                <a href="/recipe_section/recipe_page/31"
+                  ><img src="../../img/recipe/recipe8.jpg"
+                /></a>
+                <div class="card_text">
+                  <div>
+                    <a href="/recipe_section/recipe_page/31"
+                      >韓式泡菜肉蛋土司</a
+                    >
+                  </div>
+                  <span>★★★★★</span>
+                  <p>
+                    韓式泡菜的酸辣與肉蛋的豐富口感完美結合，夾在酥脆的土司中，讓你一口品味多層次的美味。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="buttons_container">
+            <button id="recipe_left_btn" class="btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                fill="currentColor"
+                class="bi bi-caret-left"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"
+                />
+              </svg>
+            </button>
+            <button id="recipe_right_btn" class="btn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                fill="currentColor"
+                class="bi bi-caret-right"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- section D  -->
+    <div class="sectionD">
+      <div class="dContainer1">
+        <img src="../../img/home_page/ProductBar2.jpg" alt="productBar" />
+      </div>
+      <div class="proTitle">
+        <h4><a href="/product_section">你可能會需要</a></h4>
+      </div>
+      <div class="dContainer2">
+        <div class="product">
+          <a href="/product_section/product_page/10"
+            ><img src="../../img/product/product10.jpg"
+          /></a>
+          <h3><a href="/product_section/product_page/10"> 郁竹鑄鐵鍋</a></h3>
+          <p>
+            翻轉你對鑄鐵鍋的全部想像. 全新進化、市面上唯一內部平滑的鑄鐵平底鍋。
+          </p>
+          <div class="price">＄3500</div>
+        </div>
+        <div class="product">
+          <a href="/product_section/product_page/13"
+            ><img src="../../img/product/product13.jpg"
+          /></a>
+          <h3>
+            <a href="/product_section/product_page/13">趙大師義大利麵調理包</a>
+          </h3>
+          <p>濃郁奶香與培根的完美結合，讓每一口都充滿幸福感</p>
+          <div class="price">＄3500</div>
+        </div>
+        <div class="product">
+          <a href="/product_section/product_page/12"
+            ><img src="../../img/product/product12.jpg"
+          /></a>
+          <h3><a href="/product_section/product_page/12">趙大廚耳朵麵</a></h3>
+          <p>每一片都是匠心獨具，手工製作的美味，讓你品味家的溫暖。</p>
+          <div class="price">＄3500</div>
+        </div>
+        <div class="product none">
+          <a href="/product_section/product_page/21"
+            ><img src="../../img/product/product21.jpg"
+          /></a>
+          <h3><a href="/product_section/product_page/21">趙大師香蒜麵包</a></h3>
+          <p>香氣四溢的蒜香麵包，隨時隨地享受現烤般的美味。</p>
+          <div class="price">＄3500</div>
+        </div>
+      </div>
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

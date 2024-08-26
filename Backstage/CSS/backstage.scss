@@ -1,0 +1,240 @@
+body {
+  display: flex;
+  flex-direction: column;
+  min-width: 1200px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  color: white;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(243, 121, 36);
+  color: white;
+  font-weight: 900;
+  user-select: none;
+  margin-bottom: 10px;
+  span {
+    margin: 0 20px;
+  }
+}
+
+#login_section {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+
+  #background {
+    position: fixed;
+    top: 0;
+    right: -10px;
+    bottom: 0;
+    left: -10px;
+    background-image: url(../../img/common/login_bg.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: blur(5px) brightness(0.7);
+    z-index: -10;
+  }
+  #login_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 500px;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.85);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.8);
+    form {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      div {
+        label {
+          display: inline-block;
+
+          width: 120px;
+        }
+        font-weight: 900;
+        font-size: 20px;
+        margin: 5px 0;
+      }
+      input {
+        height: 20px;
+      }
+      #login_btn {
+        margin-top: 40px;
+        button {
+          width: 70px;
+          height: 40px;
+          font-weight: 900;
+        }
+      }
+    }
+  }
+}
+
+#btn_group {
+  margin: 10px 0 0 200px;
+  form {
+    margin-bottom: 10px;
+  }
+  .btn_group_row {
+    form {
+      display: inline-block;
+    }
+    select {
+      display: inline-block;
+      width: 100px;
+      height: 32px;
+      padding: 6px 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid rgb(204, 204, 204);
+      border-radius: 4px;
+    }
+    .search_form_selected {
+      width: 80px;
+    }
+    .searchTerm {
+      width: 200px;
+      height: 28px;
+      border: 1px solid rgb(204, 204, 204);
+      border-right: none;
+      border-radius: 5px 0 0 5px;
+      outline: none;
+      vertical-align: middle;
+    }
+
+    .searchButton {
+      width: 40px;
+      height: 32px;
+      border: 1px solid rgb(204, 204, 204);
+      text-align: center;
+      border-radius: 0 5px 5px 0;
+      cursor: pointer;
+      margin-left: -5px;
+      &:hover {
+        background: wheat;
+      }
+    }
+  }
+}
+
+.btn {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+}
+button,
+.btn {
+  margin: 0 5px;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 600;
+  font-size: 14px;
+  justify-content: center;
+  line-height: 25px;
+  max-width: 480px;
+  min-width: 40px;
+  overflow: hidden;
+  padding: 0 5px;
+  text-align: center;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  &:hover,
+  &:focus-visible,
+  &:active {
+    background-color: wheat;
+  }
+  &:disabled {
+    cursor: default;
+    background: rgba(0, 0, 0, 0.08);
+    color: rgba(0, 0, 0, 0.3);
+  }
+}
+
+.table_setting {
+  background-image: url("../../img/common/background.png");
+  background-size: 1000px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-height: 83.5vh;
+  overflow: auto;
+  flex: 1 0 auto;
+  table {
+    table-layout: fixed;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+
+    tr {
+      text-align: center;
+      font-weight: bolder;
+
+      &:nth-child(even) {
+        background-color: rgba(245, 222, 179, 0.9);
+      }
+
+      &:nth-child(odd) {
+        background-color: rgba(255, 255, 255, 0.9);
+      }
+
+      th {
+        position: sticky;
+        top: 0;
+        background-color: wheat;
+      }
+
+      td {
+        a {
+          text-decoration: none;
+          color: rgb(0, 0, 0);
+        }
+      }
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        width: 50px;
+        height: 50px;
+      }
+    }
+    .table_btn_group {
+      button {
+        margin: 0 5px;
+      }
+    }
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(243, 121, 36);
+  text-align: center;
+  color: white;
+  font-weight: 900;
+}

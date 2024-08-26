@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>後台</title>
+    <link rel="stylesheet" href="/backstage.css" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+
+  <script>
+$(document).ready(function() {
+
+  let style;
+  let target_url_id;
+  let target_url_click;
+  let is_recipe_route = $('#is_recipe_route').val() === 'true';
+  let is_product_route = $('#is_product_route').val() === 'true';
+
+  if (is_recipe_route) {
+    if (window.location.href.endsWith('/recipe')) {
+      target_url_id = '/recipe/sort/recipe_uid';
+      $('#sort_btn').text('依倒序排行');
+
+    } else {
+      target_url_id = '/recipe';
+      $('#sort_btn').text('依正序排行');
+ 
+    }
+  } else if (is_product_route) {
+    if (window.location.href.endsWith('/product')) {
+      target_url_id = '/product/sort/product_uid';
+      $('#sort_btn').text('依倒序排行');
+
+    } else {
+      target_url_id = '/product'; 
+      $('#sort_btn').text('依正序排行');
+
+    }
+  }
+
+  $('#sort_btn').click(function(e) {
+    e.preventDefault();
+    window.location.href = target_url_id;
+  });
+
+
+
+  if (is_recipe_route) {
+    if (window.location.href.endsWith('/click_desc')) {
+      target_url_click = '/recipe/sort/click';  
+
+    } else {
+      target_url_click = '/recipe/sort/click_desc';  
+ 
+    }
+  } else if (is_product_route) {
+    if (window.location.href.endsWith('/product')) {
+      target_url_click = '/product/sort/click';  
+
+    } else {
+      target_url_click = '/product/sort/click_desc';  
+
+    }
+  }
+
+
+
+  // 為新的按鈕添加事件處理器
+  $('#click_btn').click(function(e) {
+    e.preventDefault();
+    window.location.href = target_url_click;
+  });
+
+  
+  
+  $('#sales_btn').click(function(e) {
+  e.preventDefault();
+  // 檢查當前的 URL
+  if (window.location.href.endsWith('/product/sort/sales')) {
+    // 如果當前在 '/product/sort/sales'，則導向 '/product/sort/sales_desc'
+    window.location.href = '/product/sort/sales_desc';
+  } else {
+    // 否則，導向 '/product/sort/sales'
+    window.location.href = '/product/sort/sales';
+  }
+});
+
+$('#sales_ratio_btn').click(function(e) {
+  e.preventDefault();
+  // 檢查當前的 URL
+  if (window.location.href.endsWith('/product/sort/sales_ratio')) {
+    // 如果當前在 '/product/sort/sales_ratio'，則導向 '/product/sort/sales_ratio_desc'
+    window.location.href = '/product/sort/sales_ratio_desc';
+  } else {
+    // 否則，導向 '/product/sort/sales_ratio'
+    window.location.href = '/product/sort/sales_ratio';
+  }
+});
+
+$('.search_form').submit(function(e) {
+  e.preventDefault();
+  let table = $('.search_form_selected').val();
+  let keyword = $('.searchTerm').val();
+  window.location.href = `/search?search=${table}&keyword=${keyword}`;
+});
+
+});
+  </script>
+
+<body>
+<% if (typeof items !== 'undefined' && items.length > 0) { %>
+  <% var is_recipe_route = (typeof items[0].recipe_uid !== 'undefined'); %>
+  <% var is_product_route = (typeof items[0].product_uid !== 'undefined'); %>
+<% } else { %>
+  <% var is_recipe_route = false; %>
+  <% var is_product_route = false; %>
+<% } %>
+<input type="hidden" id="is_recipe_route" value="<%= is_recipe_route %>">
+<input type="hidden" id="is_product_route" value="<%= is_product_route %>">
+
+<%- include('nav_bar') %>
+
+<div id="btn_group">
+  <div class="btn_group_row">
+
+      <a class="btn" href="/recipe">全部食譜</a>
+
+      <a class="btn" href="/product">全部商品</a>
+
+      <form>
+        <select name="style" <%= is_product_route ? 'disabled' : '' %>
+          onchange="window.location.href='/recipe/sort?style=' + this.value">
+          <option value="" selected hidden>食譜風格</option>
+          <option value="1">日式</option>
+          <option value="2">義式</option>
+          <option value="3">法式</option>
+          <option value="4">韓式</option>
+          <option value="5">泰式</option>
+        </select>
+      </form>
+
+      <form>
+        <select name="related" <%= is_recipe_route ? 'disabled' : '' %>
+          onchange="window.location.href='/product/sort?related=' + this.value">
+          <option value="" selected hidden>商品分類</option>
+          <option value="1">食材</option>
+          <option value="2">調味料</option>
+          <option value="3">調理包</option>
+          <option value="4">碗具</option>
+          <option value="5">鍋具</option>
+        </select>
+      </form>
+
+    <form class="search_form">
+      <select class="search_form_selected" name="search">
+        <option value="" selected hidden>選擇</option>
+        <option value="recipe">食譜</option>
+        <option value="product">商品</option>
+      </select>
+      <input
+        type="text"
+        class="searchTerm"
+        name="search"
+        placeholder="食譜/商品名稱"
+      />
+      <button type="submit" class="searchButton">搜尋</button>
+    </form>
+  </div>
+
+  <div class="btn_group_row">
+
+    <button id="sort_btn">依倒序排行</button>
+
+
+    <button id="click_btn">依點閱排行</button>
+
+
+      <button  id="sales_btn" <%= is_recipe_route ? 'disabled' : '' %> >依銷量排行</button>
+
+
+
+      <button  id="sales_ratio_btn" <%= is_recipe_route ? 'disabled' : '' %> >依銷售比率排行</button>
+
+
+
+      <a class="btn" href="/addRecipe" target="_blank">新增項目</a>
+      <button id="batch_del_btn">批量刪除</button>
+
+
+      <a class="btn" href="/comment">留言審查</a>
+
+      <!-- <button href="/order">訂單一覽</button> -->
+
+
+  </div>
+</div>
+<hr />
+</body>
+

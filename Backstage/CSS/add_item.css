@@ -1,0 +1,191 @@
+body {
+  margin: 0 10px;
+  background-color: rgb(250, 250, 250);
+  font-weight: 900;
+}
+
+input {
+  width: 200px;
+  height: 28px;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 5px;
+  vertical-align: middle;
+}
+
+textarea {
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 5px;
+  vertical-align: middle;
+}
+
+select {
+  display: inline-block;
+  width: 100px;
+  height: 32px;
+  padding: 6px 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 4px;
+}
+
+#item_uid span {
+  margin-left: 30px;
+}
+
+.item_container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.item_container::after {
+  content: "";
+  background: url("../../img/common/background.png");
+  background-size: 600px;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  height: 625px;
+}
+.item_container .hover {
+  position: relative;
+  color: tomato;
+  display: inline-block;
+}
+.item_container .hover:hover .hover-content {
+  visibility: visible;
+}
+.item_container .hover-content {
+  background-color: rgb(245, 245, 245);
+  width: 500px;
+  visibility: hidden;
+  color: black;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 10;
+  bottom: -200px;
+  left: 30px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.8);
+}
+.item_container .item_left {
+  margin-left: 20px;
+  width: 600px;
+}
+.item_container .item_left div {
+  margin: 10px 0;
+}
+.item_container .item_left div label {
+  display: inline-block;
+  width: 100px;
+  vertical-align: top;
+}
+.item_container .item_left div #title {
+  width: 200px;
+}
+.item_container .item_left div input {
+  display: inline-block;
+  width: 100px;
+}
+.item_container .item_left div textarea {
+  vertical-align: top;
+  width: 300px;
+  height: 125px;
+  resize: none;
+}
+.item_container .item_left div #step {
+  height: 225px;
+}
+.item_container .item_mid {
+  width: 400px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+.item_container .item_mid div {
+  margin: 10px 0;
+}
+.item_container .item_mid div label {
+  display: inline-block;
+  width: 100px;
+  vertical-align: top;
+}
+.item_container .item_mid #img_upload {
+  display: none;
+}
+.item_container .item_mid .input_no_colum {
+  display: flex;
+}
+.item_container .item_mid .input_no_colum input {
+  width: 20px;
+}
+.item_container .item_right {
+  width: 600px;
+}
+.item_container .item_right .item_right_sction button {
+  margin: 10px;
+}
+.item_container .item_right .item_right_sction input {
+  margin: 5px 2px;
+}
+
+.comment_section {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 50px;
+}
+.comment_section .title {
+  margin-bottom: 10px;
+  font-size: 30px;
+}
+.comment_section #comment_container {
+  max-height: 500px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.comment_section #comment_container .comment {
+  margin-bottom: 20px;
+  position: relative;
+}
+.comment_section #comment_container .comment::after {
+  content: "";
+  width: 80%;
+  height: 2px;
+  background-color: tomato;
+  position: absolute;
+  bottom: -5px;
+}
+.comment_section #comment_container .comment .account {
+  color: rgb(243, 121, 36);
+}
+.comment_section #comment_container .comment .rating {
+  color: rgb(243, 121, 36);
+}
+
+#submmit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#submmit button {
+  width: 250px;
+  height: 30px;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.container {
+  width: 200px;
+  height: 150px;
+  border: 3px solid rgb(204, 204, 204);
+}
+.container img {
+  width: 200px;
+  height: 150px;
+}/*# sourceMappingURL=add_item.css.map */

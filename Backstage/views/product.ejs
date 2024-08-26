@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>後台</title>
+    <link rel="stylesheet" href="/backstage.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+    $(document).ready(function () {
+      $(".del").on("click", function () {
+        console.log("qq");
+        var uid = $(this).closest("tr").find("input[name='product']").val();
+
+        if (confirm("確定要刪除這筆資料嗎？")) {
+          $.ajax({
+            url: "/deleteProduct",
+            method: "POST",
+            data: { uid: uid },
+            success: function (response) {
+              alert(response.message);
+              location.reload();
+            },
+          });
+        }
+      });
+
+      $(document).on("click", "#batch_del_btn", function () {
+        var uids = [];
+        $("input[name='product']:checked").each(function () {
+          uids.push($(this).val());
+        });
+
+        if (confirm("確定要刪除這些資料嗎？")) {
+          $.ajax({
+            url: "/deleteProducts",
+            method: "POST",
+            data: { uids: uids },
+            success: function (response) {
+              alert(response.message);
+              location.reload();
+            },
+          });
+        }
+      });
+    });
+  </script>
+  <body>
+    <%- include('btn_group') %>
+
+    <div class="table_setting">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 5%">選取</th>
+            <th style="width: 5%">編號</th>
+            <th style="width: 10%">圖片</th>
+            <th style="width: 20%">名稱</th>
+            <th>價格</th>
+            <th>存貨數量</th>
+            <th>銷量(a)</th>
+            <th>點閱量(b)</th>
+            <th>銷售比(a/b)</th>
+            <th>關聯</th>
+            <th style="width: 20%">動作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% items.forEach(function(product) { %>
+          <tr>
+            <td>
+              <input
+                type="checkbox"
+                name="product"
+                value="<%= product.product_uid %>"
+              />
+            </td>
+            <td><%= product.product_uid %></td>
+            <td>
+              <div class="container">
+                <img
+                  src="/../img/product/product<%= product.product_uid %>.jpg"
+                />
+              </div>
+            </td>
+            <td>
+              <a target="_blank" href="http://localhost:3001/product_section/product_page/<%= product.product_uid %>"
+                ><%= product.product_title %></a
+              >
+            </td>
+            <td><%= product.price %></td>
+            <td><%= product.inventory %></td>
+            <td><%= product.sales_amount %></td>
+            <td><%= product.click %></td>
+            <td>
+              <%= product.click > 0 ? ((product.sales_amount / product.click) *
+              100).toFixed(2) + '%' : 'N/A' %>
+            </td>
+            <td><%= product.related_name %></td>
+            <td class="table_btn_group">
+              <a
+                class="btn"
+                href="http://localhost:3001/product_section/product_page/<%= product.product_uid %>"
+                class="button"
+                target="_blank"
+                >瀏覽頁面</a
+              >
+              <a
+                class="btn"
+                href="/product/edit/<%= product.product_uid %>"
+                target="_blank"
+              >
+                編輯</a
+              >
+              <button class="del">刪除</button>
+            </td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+
+    <%- include('footer') %>
+  </body>
+</html>

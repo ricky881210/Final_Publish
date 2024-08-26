@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>異鍋豐| <%= items.product_title %></title>
+    <link rel="stylesheet" href="/product_page.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+  <script>
+
+
+$(document).ready(function () {
+  $(".add").click(function () {
+    var quantity = parseInt($(".product_quanity").text());
+    $(".product_quanity").text(quantity + 1);
+  });
+
+  $(".munis").click(function () {
+    var quantity = parseInt($(".product_quanity").text());
+    if (quantity > 0) {
+      $(".product_quanity").text(quantity - 1);
+    }
+  });
+
+  var commentInfos = $(".comment_wrapper .comment_info");
+  var currentIndex = 0;
+
+  function showSlide(index) {
+    var slideWidth = $(".comment_info").outerWidth(true);
+    var offset = -index * slideWidth + "px";
+    $(".comment_wrapper").css("transform", "translateX(" + offset + ")");
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % commentInfos.length;
+    showSlide(currentIndex);
+  }
+
+  $(".carousel_next").click(function () {
+    nextSlide();
+    resetInterval();
+  });
+
+  $(".carousel_pre").click(function () {
+    currentIndex = (currentIndex - 1 + commentInfos.length) % commentInfos.length;
+    showSlide(currentIndex);
+    resetInterval();
+  });
+
+  var interval = setInterval(nextSlide, 50000);
+
+  function resetInterval() {
+    clearInterval(interval);
+    interval = setInterval(nextSlide, 50000);
+  }
+
+  showSlide(currentIndex);
+  $(window).resize(function() {
+    showSlide(currentIndex); // 當窗口大小改變時重新計算偏移量
+  });
+
+
+  fetch("http://localhost:3000/api/checkSession", {
+    method: "GET",
+    credentials: "include", // 攜帶 Cookie
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.loggedIn) {
+        const user = data.user;
+
+        $("#comment_btn").click(function () {
+          const commentData = {
+            account: user.user_account, // 傳遞帳號
+            product_uid: '<%= items.product_uid %>',
+            product_rating: $("input[name='star']:checked").val(),
+            product_comment: $("#user_text").val(),
+          };
+
+          $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/api/addComment",
+            data: JSON.stringify(commentData),
+            contentType: "application/json",
+            success: function (response) {
+              alert(response.message);
+              if (response.message === "新增留言成功") {
+                // 清空留言輸入框和評分
+                $("#user_text").val("");
+                $("input[name='star']").prop("checked", false);
+                location.reload(); // 刷新頁面
+              }
+            },
+            error: function (error) {
+              console.error("新增留言失敗", error);
+              alert("新增留言失敗，請稍後再試");
+            },
+          });
+        });
+      } else {
+        console.log("User is not logged in"); // 調試信息
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("檢查登入狀態失敗，請稍後再試");
+    });
+
+
+
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    $('#cart_count').text(cart.length);
+  }
+
+  function updateNavBarCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartCount = cart.length;
+    if (cartCount === 0) {
+      $('#brackets').hide();
+    } else {
+      $('#nav_cart_count').text(cartCount);
+      $('#brackets').show();
+    }
+  }
+
+  // 初始化購物車數量
+  updateCartCount();
+  updateNavBarCartCount();
+
+  // 點擊 "放入購物車" 按鈕
+  $('.btn_text').on('click', function () {
+    const product = {
+      product_uid: '<%= items.product_uid %>',
+      product_title: '<%= items.product_title %>',
+      product_price: '<%= items.price %>',
+      product_quantity: parseInt($('.product_quanity').text(), 10),
+    };
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+
+    // 更新購物車數量
+    updateCartCount();
+    updateNavBarCartCount();
+
+    // 跳出訊息說加入成功
+    alert('加入購物車成功！');
+
+    // 商品數量歸零
+    $('.product_quanity').text(0);
+  });
+});
+
+
+
+
+
+  </script>
+  <body>
+    <%- include('nav_bar') %>
+    <div id="product">
+      <div class="product_img">
+        <img src="../../img/product/product<%= items.product_uid %>.jpg" />
+      </div>
+      <div class="product_info">
+        <div class="product_title"><%= items.product_title %></div>
+        <div id="star_container">
+          <div class="star">
+            <input type="radio" name="star" id="score5" value="5"<%= items.product_rating == 5 ? 'checked' : '' %> />
+            <label class="star" for="score5"></label>
+
+            <input type="radio" name="star" id="score4" value="4" <%= items.product_rating == 4 ? 'checked' : '' %>/>
+            <label class="star" for="score4"></label>
+
+            <input type="radio" name="star" id="score3" value="3" <%= items.product_rating == 3 ? 'checked' : '' %>/>
+            <label class="star" for="score3"></label>
+
+            <input type="radio" name="star" id="score2" value="2" <%= items.product_rating == 2 ? 'checked' : '' %>/>
+            <label class="star" for="score2"></label>
+
+            <input type="radio" name="star" id="score1" value="1" <%= items.product_rating == 1 ? 'checked' : '' %>/>
+            <label class="star" for="score1"></label>
+          </div>
+          <span>(5678)</span>
+        </div>
+        <div class="product_price">$ <%= items.price %></div>
+        <div class="product_tag">
+          <span>
+            <% if (items.related == 1) { %>
+              食材
+            <% } else if (items.related == 2) { %>
+              調味料
+            <% } else if (items.related == 3) { %>
+              調理包
+            <% } else if (items.related == 4) { %>
+              碗具
+            <% } else if (items.related == 5) { %>
+              鍋具
+            <% } %>
+          </span>
+          <span>
+            <% if (items.sales_amount >= 1000 ) { %>
+            熱銷
+            <% } else if (items.sales_amount >= 2500) { %>
+            大熱銷
+            <% } else if (items.sales_amount >= 5000) { %>
+            絕讚熱銷
+            <% } else { %>
+            熱議
+            <% } %>
+          </span>
+          <span>
+            <% if (items.product_rating == 3) { %>
+              好評
+            <% } else if (items.product_rating == 4) { %>
+              極度好評
+            <% } else if (items.product_rating == 5) { %>
+              壓倒性好評
+            <% } else { %>
+              品質優良
+            <% } %>
+          </span>
+        </div>
+        <div class="product_size">
+          <div class="title">尺寸規格</div>
+          <div class="size_info">
+            <% 
+            var sizes = items.size.split("@");
+            sizes.forEach(function(size) { 
+            %>
+              <div><%= size %></div>
+            <% 
+            }); 
+            %>
+          </div>
+        </div>
+        <div class="product_describe">
+          <p>
+            <%= items.full_describe%>
+        </div>
+        <div class="btn">
+          <div class="btn_border">
+            <div class="btn_btn">
+              <button class="munis">-</button
+              ><span class="product_quanity">0</span
+              ><button class="add">+</button>
+            </div>
+            <button class="btn_text">放入購物車</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="recommend_section">
+      <div class="title">您可能會喜歡</div>
+      <div class="recipe_cards">
+        <% recommendations.forEach(function(product) { %>
+        <div class="card">
+          <a href="/product_section/product_page/<%= product.product_uid %>"><img src="../../img/product/product<%= product.product_uid %>.jpg" /></a>
+          <a class="card_text" href="/product_section/product_page/<%= product.product_uid %>"><%= product.product_title %></a>
+          <div class="rating">
+            <% for(let i = 1; i <= 5; i++) { %>
+              <% if(i <= product.product_rating) { %>
+                <span>★</span>
+              <% } else { %>
+                <span>☆</span>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <div id="user_comment">
+      <div class="title">使用心得</div>
+      <div class="comment_carousel">
+        <div class="comment_wrapper">
+          <% 
+            let filteredComments = comments.filter(comment => comment.product_rating >= 4).slice(0, 3);
+            if (filteredComments.length === 3) {
+              filteredComments.forEach(function(comment) { 
+          %>
+                <div class="comment_info">
+                  <div class="user_name"><%= comment.user_name %></div>
+                  <div class="user_rating">
+                    <% for (let i = 0; i < comment.product_rating; i++) { %>
+                      <span>★</span><!-- 實心星星 -->
+                    <% } %>
+                    <% for (let i = comment.product_rating; i < 5; i++) { %>
+                      <span>☆</span> <!-- 空心星星 -->
+                    <% } %>
+                  </div>
+                  <div class="comment_text"><%= comment.product_comment %></div>
+                </div>
+          <% 
+              });
+            } 
+          %>
+        </div>
+        
+        
+      </div>
+      <div class="carousel_btn">
+        <div class="carousel_pre">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="50"
+            height="50"
+            fill="currentColor"
+            class="bi bi-caret-left"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"
+            />
+          </svg>
+        </div>
+        <div class="carousel_next">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="50"
+            height="50"
+            fill="currentColor"
+            class="bi bi-caret-right"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="more_commet">
+      <% if (comments.length === 0) { %>
+        <div class="no_comments">尚未有人分享使用心得喔!</div>
+      <% } else { %>
+        <% comments.reverse().forEach(function(comment) { %>
+          <% if (comment.is_submmit === 0) { %>
+            <div class="all_comment_card">
+              <span class="comment_name"><%= comment.user_name %></span>
+              <span class="comment_time"><%= new Date(comment.comment_time).toISOString().split('T')[0] %></span>
+              <span class="comment_rating">
+                <% for (let i = 0; i < comment.product_rating; i++) { %>
+                  <span>★</span> <!-- 實心星星 -->
+                <% } %>
+                <% for (let i = comment.product_rating; i < 5; i++) { %>
+                  <span>☆</span> <!-- 空心星星 -->
+                <% } %>
+              </span>
+              <div class="user_comment"><%= comment.product_comment %></div>
+            </div>
+          <% } %>
+        <% }); %>
+      <% } %>
+    </div>
+    
+    
+
+      </div>
+      
+
+
+        <div class="me_comment">
+          <div class="comment_star">
+            <input type="radio" name="star" id="comment_score5" value="5">
+            <label class="star" for="comment_score5"></label>
+
+            <input type="radio" name="star" id="comment_score4" value="4" />
+            <label class="star" for="comment_score4"></label>
+
+            <input type="radio" name="star" id="comment_score3" value="3"/>
+            <label class="star" for="comment_score3"></label>
+
+            <input type="radio" name="star" id="comment_score2" value="2" />
+            <label class="star" for="comment_score2"></label>
+
+            <input type="radio" name="star" id="comment_score1" value="1" />
+            <label class="star" for="comment_score1"></label>
+          </div>
+          <textarea id="user_text" maxlength="200" placeholder="與其他人分享你的心得吧"></textarea>
+          <button id="comment_btn">我要留言</button>
+        </div>
+
+
+    
+    
+
+    <%- include('footer') %>
+  </body>
+</html>

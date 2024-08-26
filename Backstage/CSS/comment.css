@@ -1,0 +1,113 @@
+@charset "UTF-8";
+body {
+  display: flex;
+  flex-direction: column;
+  min-width: 1200px;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(243, 121, 36);
+  color: white;
+  font-weight: 900;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  margin-bottom: 10px;
+}
+nav span {
+  margin: 0 20px;
+}
+
+button,
+.btn {
+  margin: 0 5px;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(204, 204, 204);
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 600;
+  font-size: 14px;
+  justify-content: center;
+  line-height: 25px;
+  max-width: 480px;
+  min-width: 40px;
+  overflow: hidden;
+  padding: 0 5px;
+  text-align: center;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  -moz-user-select: none;
+       user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+}
+button:hover, button:focus-visible, button:active,
+.btn:hover,
+.btn:focus-visible,
+.btn:active {
+  background-color: wheat;
+}
+button:disabled,
+.btn:disabled {
+  cursor: default;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+}
+
+#comment_btn_group {
+  margin: 10px 0 0 200px;
+}
+#comment_btn_group .group_row {
+  margin-bottom: 15px;
+}
+
+.comment_container {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.comment_container table {
+  margin: auto;
+  width: 100%;
+  border-collapse: collapse; /* 合併邊框 */
+  table-layout: auto;
+}
+.comment_container th, .comment_container td {
+  padding: 10px;
+  text-align: center;
+  word-wrap: break-word; /* 自動換行 */
+}
+.comment_container td button {
+  margin-bottom: 5px;
+}
+.comment_container th {
+  background-color: rgba(245, 222, 179, 0.9);
+  position: sticky;
+  top: 0;
+}
+.comment_container tr:nth-child(odd) td {
+  background-color: white;
+}
+.comment_container tr:nth-child(even) td {
+  background-color: rgba(245, 222, 179, 0.9);
+}
+.comment_container .narrow {
+  width: 8%;
+}
+.comment_container .narrow_mid {
+  width: 10%;
+}
+.comment_container .narrow_big {
+  width: 50%;
+}/*# sourceMappingURL=comment.css.map */

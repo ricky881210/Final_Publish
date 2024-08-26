@@ -1,0 +1,831 @@
+body {
+  box-sizing: border-box;
+  border: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+body::-webkit-scrollbar {
+  width: 10px;
+}
+body::-webkit-scrollbar-button {
+  display: none;
+}
+body::-webkit-scrollbar-track-piece {
+  background: transparent;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--main_orange);
+  border-radius: 4px;
+  border: none;
+}
+body::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
+:root {
+  --main_orange: rgb(243, 121, 36);
+  --text_withe: rgb(255, 255, 255);
+  --text_black: rgb(53, 53, 53);
+  --border_gray: rgb(128, 128, 128);
+  --bg_opacity_black: rgba(0, 0, 0, 0.3);
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Section A */
+.slide_section {
+  position: relative;
+  height: 80vh;
+  width: 100%;
+  margin-top: 50px;
+}
+.slide_section .carousel {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.slide_section .carousel .slide_container {
+  display: flex;
+  transform: translateX(0);
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.slide_section .carousel .slide_container::before {
+  position: absolute;
+  width: 300%;
+  height: 100%;
+  background-color: var(--bg_opacity_black);
+  content: "";
+  z-index: 3;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.slide_section .carousel .slide_container .big_slide {
+  min-width: 100%;
+  height: 100%;
+  position: relative;
+}
+.slide_section .carousel .slide_container .big_slide img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.slide_section .carousel .slide_container .big_slide .slide_text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: var(--text_withe);
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.slide_section .carousel .slide_container .big_slide .slide_text:hover p {
+  opacity: 1;
+  max-height: 200px;
+}
+.slide_section .carousel .slide_container .big_slide .slide_text h1 {
+  font-size: 50px;
+  text-align: center;
+}
+.slide_section .carousel .slide_container .big_slide .slide_text P {
+  visibility: visible;
+  font-size: 24px;
+  opacity: 0;
+  transition: 0.8s ease-in-out;
+  max-height: 0;
+  text-align: center;
+  overflow: hidden;
+}
+.slide_section .carousel .buttons_container {
+  justify-content: space-between;
+}
+.slide_section .carousel .buttons_container .btn {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--text_withe);
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  top: 0;
+  height: 100%;
+  outline: none;
+}
+.slide_section .carousel .buttons_container .btn:hover, .slide_section .carousel .buttons_container .btn:focus {
+  background-color: var(--bg_opacity_black);
+}
+.slide_section .carousel .buttons_container #left {
+  left: 0;
+}
+.slide_section .carousel .buttons_container #right {
+  right: 0;
+}
+
+/* Section B */
+.sectionB {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bContainer1 {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 300px;
+  height: 300px;
+  border-radius: 10px;
+  /* Optional: adds rounded corners */
+}
+
+.logo {
+  width: 300px;
+  height: 300px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  /* Ensures the image covers the container without stretching */
+  opacity: 0.4;
+}
+
+.logoText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(53, 53, 53);
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.bContainer2 {
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  font-family: "Courier New", Courier, monospace;
+  margin-top: -30px;
+}
+
+.link_card {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  width: 100%;
+}
+.link_card div a {
+  position: relative;
+  display: inline-block;
+  margin: 0 40px;
+}
+.link_card div a h4 {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text_withe);
+  font-size: 30px;
+  font-family: "Courier New", Courier, monospace;
+}
+.link_card div a img {
+  box-sizing: border-box;
+  width: 100%;
+  height: 250px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+/* section C  */
+.recipe_recommend_section {
+  width: 100%;
+  margin-top: 20px;
+}
+.recipe_recommend_section .recipe_bar {
+  position: relative;
+}
+.recipe_recommend_section img {
+  width: 100%;
+  height: 400px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  border-radius: 4px;
+}
+.recipe_recommend_section h1 {
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  color: var(--text_black);
+  font-size: 50px;
+  font-family: "Courier New", Courier, monospace;
+}
+.recipe_recommend_section .card_container {
+  position: relative;
+  height: 80vh;
+  width: 100%;
+}
+.recipe_recommend_section .card_container .carousel {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.recipe_recommend_section .card_container .carousel .slide_container {
+  display: flex;
+  transform: translateX(0);
+  transition: transform 0.5s ease-in-out;
+  width: 300%;
+  height: 100%;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide {
+  height: 100%;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card {
+  display: flex;
+  gap: 20px;
+  width: 60%;
+  margin: 8px auto;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) {
+  flex-direction: row;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) .card_text {
+  text-align: left;
+  align-items: flex-start;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) {
+  flex-direction: row-reverse;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) .card_text {
+  text-align: start;
+  align-items: flex-end;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card img {
+  width: 400px;
+  height: 250px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  border-radius: 4px;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 60%;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text div {
+  font-size: 30px;
+  font-weight: 900;
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text span {
+  color: var(--main_orange);
+}
+.recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text p {
+  font-weight: 600;
+  font-size: 16px;
+}
+.recipe_recommend_section .card_container .carousel .buttons_container {
+  justify-content: space-between;
+}
+.recipe_recommend_section .card_container .carousel .buttons_container .btn {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0);
+  color: var(--border_gray);
+  border: none;
+  padding: 0;
+  box-sizing: border-box;
+  top: 0;
+  height: 100%;
+  outline: none;
+}
+.recipe_recommend_section .card_container .carousel .buttons_container .btn svg {
+  cursor: pointer;
+}
+.recipe_recommend_section .card_container .carousel .buttons_container .btn svg:hover {
+  color: var(--main_orange);
+}
+.recipe_recommend_section .card_container .carousel .buttons_container #recipe_left_btn {
+  left: 0;
+}
+.recipe_recommend_section .card_container .carousel .buttons_container #recipe_right_btn {
+  right: 0;
+}
+
+/* section D  */
+.dContainer1 {
+  width: 100%;
+  background-size: cover;
+  position: relative;
+  margin-top: -20px;
+}
+.dContainer1 img {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center top;
+     object-position: center top;
+}
+
+.proTitle {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 40px;
+}
+
+.dContainer2 {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.dContainer2 .product {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  width: 250px;
+  box-sizing: border-box;
+  align-items: center;
+  text-align: center;
+}
+.dContainer2 .product img {
+  width: 250px;
+  height: 250px;
+  border-radius: 4px;
+}
+.dContainer2 .product h3 {
+  font-size: 1.2em;
+  margin: 10px 0;
+}
+.dContainer2 .product p {
+  font-size: 0.9em;
+  color: rgb(53, 53, 53);
+  margin-top: -10px;
+}
+.dContainer2 .product .price {
+  font-size: 1.2em;
+  color: rgb(53, 53, 53);
+  align-items: center;
+  margin-top: -20px;
+}
+
+/* section E  */
+@media screen and (max-width: 1300px) {
+  .slide_section {
+    height: 70vh;
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text h1 {
+    font-size: 40px;
+    text-align: center;
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text P {
+    font-size: 20px;
+  }
+  .slide_section .carousel .buttons_container {
+    justify-content: space-between;
+  }
+  .slide_section .carousel .buttons_container .btn {
+    position: absolute;
+    background-color: var(--bg_opacity_black);
+    color: var(--text_withe);
+    border: none;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    top: 0;
+    height: 100%;
+    outline: none;
+  }
+  .slide_section .carousel .buttons_container .btn:hover, .slide_section .carousel .buttons_container .btn:focus {
+    background-color: var(--text_black);
+  }
+  .slide_section .carousel .buttons_container #left {
+    left: 0;
+  }
+  .slide_section .carousel .buttons_container #right {
+    right: 0;
+  }
+  .recipe_recommend_section .card_container {
+    position: relative;
+    height: 80vh;
+    width: 100%;
+  }
+  .recipe_recommend_section .card_container .carousel {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container {
+    display: flex;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    width: 300%;
+    height: 100%;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide {
+    height: 100%;
+    width: 100%;
+    margin: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) {
+    flex-direction: row;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) .card_text {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) .card_text {
+    text-align: start;
+    align-items: flex-end;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card img {
+    width: 400px;
+    height: 250px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 40%;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text div {
+    font-size: 30px;
+    font-weight: 900;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text span {
+    color: var(--main_orange);
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text p {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container {
+    justify-content: space-between;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn {
+    position: absolute;
+    background-color: var(--text_withe);
+    color: var(--border_gray);
+    border: none;
+    padding: 0;
+    box-sizing: border-box;
+    top: 0;
+    height: 100%;
+    outline: none;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn svg {
+    cursor: pointer;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn svg:hover {
+    color: var(--main_orange);
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container #recipe_left_btn {
+    left: 0;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container #recipe_right_btn {
+    right: 0;
+  }
+  .dContainer2 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  .dContainer2 .product {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    box-sizing: border-box;
+    align-items: center;
+    text-align: center;
+  }
+  .dContainer2 .product img {
+    width: 200px;
+    height: 200px;
+    border-radius: 4px;
+  }
+  .dContainer2 .product h3 {
+    font-size: 1.2em;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product p {
+    font-size: 0.9em;
+    color: rgb(53, 53, 53);
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product .price {
+    font-size: 1.2em;
+    color: rgb(53, 53, 53);
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product button:hover {
+    background-color: #0056b3;
+  }
+}
+@media screen and (max-width: 900px) {
+  .slide_section {
+    position: relative;
+    height: 60vh;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 10px;
+  }
+  .slide_section .carousel {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .slide_section .carousel .slide_container {
+    display: flex;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    width: 100%;
+    height: 100%;
+  }
+  .slide_section .carousel .slide_container .big_slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+  }
+  .slide_section .carousel .slide_container .big_slide img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text {
+    padding: 5px 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: var(--text_withe);
+    transform: translate(-50%, -50%);
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text:hover p {
+    opacity: 1;
+    max-height: 200px;
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+  .slide_section .carousel .slide_container .big_slide .slide_text P {
+    visibility: visible;
+    font-size: 14px;
+    opacity: 0;
+    transition: 0.8s ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+  }
+  .slide_section .carousel .buttons_container {
+    justify-content: space-between;
+  }
+  .slide_section .carousel .buttons_container .btn {
+    position: absolute;
+    background-color: var(--bg_opacity_black);
+    color: var(--text_withe);
+    border: none;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    top: 0;
+    height: 100%;
+    outline: none;
+    width: 5%;
+    align-self: center;
+  }
+  .slide_section .carousel .buttons_container .btn:hover, .slide_section .carousel .buttons_container .btn:focus {
+    background-color: var(--text_black);
+  }
+  .slide_section .carousel .buttons_container .btn svg {
+    width: 30px;
+    height: 30px;
+  }
+  .slide_section .carousel .buttons_container #left {
+    left: 0;
+  }
+  .slide_section .carousel .buttons_container #right {
+    right: 0;
+  }
+  .recipe_recommend_section img {
+    height: 150px;
+  }
+  .recipe_recommend_section h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text_black);
+    font-size: 40px;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .recipe_recommend_section .card_container {
+    position: relative;
+    height: 50%;
+    width: 100%;
+  }
+  .recipe_recommend_section .card_container .carousel {
+    height: 50%;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container {
+    display: flex;
+    transform: translateX(0);
+    transition: transform 0.5s ease-in-out;
+    width: 300%;
+    height: 50%;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide {
+    height: 100%;
+    width: 100%;
+    margin: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    margin: 8px 0;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) {
+    flex-direction: row;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(odd) .card_text {
+    text-align: left;
+    align-items: flex-start;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) {
+    display: none;
+    flex-direction: row-reverse;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card:nth-child(even) .card_text {
+    text-align: start;
+    align-items: flex-end;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card img {
+    width: 200px;
+    height: 125px;
+    -o-object-fit: cover;
+       object-fit: cover;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+            user-select: none;
+    margin: auto;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 60%;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text div {
+    font-size: 30px;
+    font-weight: 900;
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text span {
+    color: var(--main_orange);
+  }
+  .recipe_recommend_section .card_container .carousel .slide_container .slide .card .card_text p {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container {
+    justify-content: space-between;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0);
+    color: var(--border_gray);
+    border: none;
+    padding: 0;
+    box-sizing: border-box;
+    top: 0;
+    height: 100%;
+    outline: none;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn svg {
+    cursor: pointer;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container .btn svg:hover {
+    color: var(--main_orange);
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container #recipe_left_btn {
+    left: 0;
+  }
+  .recipe_recommend_section .card_container .carousel .buttons_container #recipe_right_btn {
+    right: 0;
+  }
+  .dContainer2 {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+  .dContainer2 .product {
+    display: flex;
+    flex-direction: column;
+    width: 115px;
+    box-sizing: border-box;
+    align-items: center;
+    text-align: center;
+  }
+  .dContainer2 .product img {
+    width: 115px;
+    height: 115px;
+    border-radius: 4px;
+  }
+  .dContainer2 .product h3 {
+    font-size: 1.2em;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product p {
+    width: 100%;
+    font-size: 0.9em;
+    color: rgb(53, 53, 53);
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product .price {
+    font-size: 1.2em;
+    color: rgb(53, 53, 53);
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 0.3em;
+    align-items: center;
+    font-family: "Courier New", Courier, monospace;
+  }
+  .dContainer2 .product button:hover {
+    background-color: #0056b3;
+  }
+  .none {
+    display: none !important;
+  }
+}/*# sourceMappingURL=HP.css.map */

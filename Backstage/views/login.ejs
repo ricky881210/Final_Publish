@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>後台系統登入頁面</title>
+    <link rel="stylesheet" href="backstage.css" />
+    <link rel="icon" href="../../img/common/favicon.ico" />
+    <script src="/Backstage/jquery/jquery-3.7.1.min.js"></script>
+  </head>
+
+  <script>
+    $(document).ready(function () {
+      $("form").on("#submit", function (e) {
+        var staff_uid = $("#staff_id").val();
+        var password = $("#staff_password").val();
+
+        if (staff_uid === "" || password === "") {
+          alert("帳號或密碼不能為空!");
+          e.preventDefault(); // 阻止表單提交
+        }
+      });
+    });
+  </script>
+
+  <% if (typeof error !== 'undefined') { %>
+  <script>
+    alert("員工編號或密碼錯誤!");
+  </script>
+  <% } %>
+
+  <body>
+    <%- include('nav_bar') %>
+
+    <div id="login_section">
+      <div id="login_container">
+        <form action="/login" method="post">
+          <div>
+            <label for="staff_id">員工編號 :</label>
+            <input name="staff_uid" id="staff_id" value="11307001" />
+          </div>
+          <div>
+            <label for="staff_password">密碼 :</label>
+            <input
+              type="password"
+              name="password"
+              id="staff_password"
+              value="password"
+            />
+          </div>
+          <div id="login_btn">
+            <button id="submit">登入</button>
+            <button type="button">忘記密碼</button>
+          </div>
+        </form>
+      </div>
+      <div id="background"></div>
+    </div>
+    <%- include('footer') %>
+  </body>
+</html>
